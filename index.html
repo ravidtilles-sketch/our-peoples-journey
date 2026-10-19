@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Our People's Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&family=Rubik:wght@500;600&display=swap">
+<style>
+/* Layout: full-bleed storybook map stage. Title card top-left, illustration card top-right,
+   caption ribbon along the bottom of the map, control rail beneath the stage. One committed look (sea + sand + night chrome). */
+:root{
+  --sea:#2C6F8E; --sea-2:#235D78; --land:#EFD39B; --land-shade:#C9A060; --ink:#1D2430;
+  --exile:#D3304A; --home:#14866A; --choice:#2F6DB5; --gold:#F2B134; --paper:#FFF9EE; --paper-2:#F3E8D2;
+  --chrome:#13202B; --chrome-2:#1F3342; --chrome-3:#2A465B; --chrome-ink:#F3EEE4; --muted:#9DB2C0; --soft-ink:#6A604F;
+  --f-display:'Baloo 2','Trebuchet MS','Avenir Next',system-ui,sans-serif;
+  --f-body:'Nunito','Avenir Next',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-he:'Rubik','Arial Hebrew','Noto Sans Hebrew','Times New Roman',sans-serif;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--chrome);color:var(--chrome-ink);font-family:var(--f-body);overflow:hidden;-webkit-font-smoothing:antialiased}
+#app{display:grid;grid-template-rows:minmax(0,1fr) auto;height:100%}
+.stage{position:relative;overflow:hidden;min-height:0;background:var(--sea)}
+#map{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(8,24,36,.35) 100%)}
+
+/* map text, drawn in screen px inside scaled groups */
+.plabel{font:800 15px var(--f-body);fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round}
+.pdot{fill:var(--ink);stroke:var(--paper);stroke-width:2.5px}
+.rlabel{font:700 15px var(--f-display);letter-spacing:.2em;fill:#86683A;opacity:.8}
+.glabel{font:700 20px var(--f-display);letter-spacing:.3em;fill:#8E7348;opacity:.55}
+.slabel{font:italic 700 15px var(--f-body);letter-spacing:.12em;fill:#CFE6F0;opacity:.75}
+.jstar{fill:var(--gold);stroke:var(--ink);stroke-width:1.5px}
+.pulse{fill:none;stroke:var(--gold);stroke-width:3px;transform-origin:0 0;animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{from{transform:scale(.6);opacity:.95}to{transform:scale(2.6);opacity:0}}
+.candle-glow{animation:flicker 1.6s ease-in-out infinite alternate}
+@keyframes flicker{from{opacity:.75}to{opacity:1}}
+.candle{opacity:0;transition:opacity 1.2s ease}
+.candle.on{opacity:1}
+#dimmer{transition:opacity 1.6s ease}
+
+/* overlays */
+.titlecard{position:absolute;top:16px;left:16px;max-width:min(560px,calc(100% - 32px));background:var(--paper);color:var(--ink);border-radius:16px;padding:12px 18px 14px;box-shadow:0 8px 28px rgba(5,15,25,.3);z-index:2}
+.tc-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.era{display:inline-block;font:800 12.5px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:var(--ink);padding:6px 10px;border-radius:999px}
+.count{font:700 13px var(--f-body);color:var(--soft-ink);font-variant-numeric:tabular-nums}
+.titlecard h1{font:700 clamp(24px,3.1vw,42px)/1.05 var(--f-display);margin:8px 0 0;text-wrap:balance}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font:700 12.5px var(--f-body);color:var(--soft-ink)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:22px;height:5px;border-radius:3px}
+.legend .mapyear{color:var(--soft-ink);font-style:italic}
+.eramap{transition:opacity 1.2s ease}
+.elabel{font:italic 700 13px var(--f-body);letter-spacing:.16em;fill:#6E5636;opacity:.7;paint-order:stroke;stroke:rgba(255,249,238,.55);stroke-width:3px}
+.artcard{position:absolute;top:16px;right:16px;width:clamp(210px,23vw,330px);background:var(--paper);color:var(--ink);border-radius:18px;padding:10px 10px 12px;box-shadow:0 8px 28px rgba(5,15,25,.3);z-index:2}
+.artcard.pop{animation:pop .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.85) rotate(-2deg);opacity:0}to{transform:none;opacity:1}}
+.art svg{display:block;width:100%;height:auto;border-radius:12px}
+.he{font:600 clamp(22px,2.2vw,30px)/1.25 var(--f-he);text-align:center;margin-top:8px}
+.tr{font:700 13px/1.3 var(--f-body);color:var(--soft-ink);text-align:center;margin-top:2px}
+.caption{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:min(1020px,calc(100% - 32px));background:rgba(13,24,33,.88);color:#fff;border-radius:18px;padding:14px 24px;z-index:2;box-shadow:0 8px 28px rgba(5,15,25,.35);min-height:1em}
+.caption p{margin:0;font:700 clamp(18px,2.2vw,30px)/1.35 var(--f-body);text-align:center;text-wrap:balance;transition:opacity .3s}
+.caption p.out{opacity:0}
+
+.notice{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(16px + 7.5em);width:min(720px,calc(100% - 32px));display:flex;gap:10px;align-items:center;background:var(--gold);color:var(--ink);border-radius:14px;padding:10px 12px 10px 16px;font:800 15px/1.4 var(--f-body);z-index:3;box-shadow:0 8px 24px rgba(5,15,25,.3)}
+.notice span{flex:1;min-width:0}
+.notice button{appearance:none;border:0;background:rgba(0,0,0,.08);color:var(--ink);width:34px;height:34px;border-radius:10px;font:800 20px/1 var(--f-body);cursor:pointer;flex:none}
+/* control rail */
+.rail{display:flex;align-items:center;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--chrome);flex-wrap:wrap;border-top:1px solid #23394A}
+.grp{display:flex;align-items:center;gap:6px}
+.btn{appearance:none;border:0;background:var(--chrome-2);color:var(--chrome-ink);height:44px;min-width:44px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;padding:0 12px;font:800 14px var(--f-body)}
+.btn:hover{background:var(--chrome-3)}
+.btn:focus-visible,.tick:focus-visible,.seg button:focus-visible,.choice:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn svg{width:20px;height:20px;fill:currentColor}
+.btn.play{background:var(--gold);color:var(--ink);min-width:58px;height:52px;border-radius:999px}
+.btn.play svg{width:24px;height:24px}
+.btn[aria-pressed="false"]{color:var(--muted)}
+.timeline{flex:1 1 220px;min-width:0;display:flex;gap:4px;align-items:center}
+.tick{flex:1;height:12px;border-radius:999px;background:var(--chrome-3);border:0;cursor:pointer;padding:0;min-width:8px}
+.tick.done{background:#7E9AAD}
+.tick.cur{background:var(--gold)}
+.seg{display:inline-flex;background:var(--chrome-2);border-radius:12px;padding:3px}
+.seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:800 13.5px var(--f-body);padding:0 12px;height:38px;border-radius:9px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--paper);color:var(--ink)}
+
+/* sheets */
+.sheet-wrap{position:absolute;inset:0;background:rgba(8,16,24,.5);display:grid;place-items:center;padding:16px;z-index:5}
+.sheet{background:var(--paper);color:var(--ink);border-radius:20px;width:min(760px,100%);max-height:100%;overflow:auto;padding:22px 24px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.sheet h2{font:700 28px/1.1 var(--f-display);margin:0}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.sheet .btn{background:var(--paper-2);color:var(--ink)}
+.sheet .btn:hover{background:#E8DAC0}
+.sheet .btn.primary{background:var(--ink);color:var(--paper)}
+.script-scene{padding:14px 0;border-top:1px solid #E6D9C0}
+.script-scene h3{font:700 20px/1.2 var(--f-display);margin:4px 0 6px}
+.script-scene p{margin:0;font:600 17px/1.6 var(--f-body);max-width:68ch}
+.script-scene .era{font-size:11px}
+.credits h3{font:800 13px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--soft-ink);margin:16px 0 4px}
+.credits p{font:600 16px/1.55 var(--f-body);margin:0 0 6px;max-width:68ch}
+.credits a{color:var(--home);font-weight:800}
+.note{font:600 14.5px/1.5 var(--f-body);color:var(--soft-ink);margin:6px 0 0;max-width:68ch}
+.field{display:grid;gap:6px;margin:14px 0}
+.field label,.field .lbl{font:800 14px var(--f-body)}
+.field select,.field input[type=range]{font:600 15px var(--f-body);width:100%;max-width:420px}
+.field select{padding:8px;border-radius:10px;border:1px solid #D8C7A6;background:#fff;color:var(--ink)}
+.check{display:flex;align-items:center;gap:10px;font:700 15.5px var(--f-body);padding:6px 0}
+.check input{width:20px;height:20px;accent-color:var(--home)}
+.scene-list{columns:2 240px;column-gap:24px}
+
+/* start + end */
+.overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(9,22,32,.5);padding:16px;z-index:4}
+.startcard{background:var(--paper);color:var(--ink);border-radius:24px;padding:28px 28px 24px;width:min(680px,100%);max-height:100%;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.startcard .he{font-size:28px;text-align:left;margin:0;color:var(--soft-ink)}
+.startcard h2{font:800 clamp(34px,5vw,54px)/1 var(--f-display);margin:4px 0 8px;text-wrap:balance}
+.startcard p.lead{font:600 18px/1.5 var(--f-body);margin:0 0 18px;color:#3B3A36;max-width:56ch}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.choice{appearance:none;text-align:left;border:0;cursor:pointer;border-radius:18px;padding:16px 18px;background:var(--paper-2);color:var(--ink);display:grid;gap:4px;transition:transform .15s ease,background .15s}
+.choice:hover{transform:translateY(-2px);background:#EEDDBD}
+.choice b{font:800 24px/1.1 var(--f-display)}
+.choice span{font:700 14.5px/1.4 var(--f-body);color:var(--soft-ink)}
+.choice .go{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font:800 14px var(--f-body);color:var(--home)}
+.choice.k b{color:var(--exile)}
+.hint{font:600 13.5px/1.5 var(--f-body);color:var(--soft-ink);margin:14px 0 0}
+.linkish{appearance:none;border:0;background:none;color:var(--home);font:800 13.5px var(--f-body);cursor:pointer;padding:0;text-decoration:underline}
+
+@media (max-width:760px){
+  .artcard{display:none}
+  .titlecard{padding:10px 14px 12px}
+  .legend{display:none}
+  .caption{padding:10px 14px;bottom:10px}
+  .rail{gap:8px;padding-inline:10px}
+  .timeline{order:5;flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){.pulse,.candle-glow{animation:none}.artcard.pop{animation:none}}
+</style>
+<div id="app">
+  <div class="stage" id="stage">
+    <svg id="map" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-label="Map showing the journeys of the Jewish people" role="img"></svg>
+
+    <header class="titlecard" id="titlecard">
+      <div class="tc-top"><span class="era" id="era">Nearly 4,000 years</span><span class="count" id="count"></span></div>
+      <h1 id="title">Our People's Journey</h1>
+      <div class="legend" aria-label="Map key">
+        <span><i style="background:var(--exile)"></i>Leaving home</span>
+        <span><i style="background:var(--home)"></i>Going to the Land of Israel</span>
+        <span><i style="background:var(--choice)"></i>Moving by choice</span>
+        <span class="mapyear" id="mapyear">Borders: today</span>
+      </div>
+    </header>
+
+    <aside class="artcard" id="artcard" aria-hidden="true">
+      <div class="art" id="art"></div>
+      <div class="he" id="he" lang="he" dir="rtl"></div>
+      <div class="tr" id="tr"></div>
+    </aside>
+
+    <div class="notice" id="notice" role="status" hidden><span></span><button type="button" id="noticeX" aria-label="Dismiss">×</button></div>
+    <div class="caption" id="caption" aria-live="polite"><p id="cap">Choose a version to begin.</p></div>
+
+    <div class="overlay" id="start">
+      <div class="startcard">
+        <p class="he" lang="he" dir="rtl" style="text-align:right">הַמַּסָּע שֶׁלָּנוּ</p>
+        <h2 id="startTitle">Our People's Journey</h2>
+        <p class="lead" id="startLead">Follow the Jewish people across the map, from Avraham to today. Arrows show each journey, and a voice tells the story.</p>
+        <div class="choices">
+          <button class="choice k" id="chooseK" type="button"><b>Little Learners</b><span>Kindergarten to Grade 2</span><span id="durK">About 4 minutes</span><span class="go">Start ▸</span></button>
+          <button class="choice o" id="chooseO" type="button"><b>Explorers</b><span>Grade 3 and up</span><span id="durO">About 8 minutes</span><span class="go">Start ▸</span></button>
+        </div>
+        <p class="hint">Turn your sound on. Press Space to pause, and the arrow keys to move between scenes. <button class="linkish" id="startScript" type="button">Read the script</button> · <button class="linkish" id="startCredits" type="button">Credits</button></p>
+      </div>
+    </div>
+
+    <div class="sheet-wrap" id="scriptSheet" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="scriptH">
+        <div class="sheet-head">
+          <h2 id="scriptH">Script</h2>
+          <div class="grp"><button class="btn primary" id="copyScript" type="button">Copy script</button><button class="btn" data-close type="button">Close</button></div>
+        </div>
+        <p class="note">Read this aloud if you would like to record your own narration. Each scene is one paragraph.</p>
+        <div id="scriptBody"></div>
+      </div>
+    </div>
+
+    <div class="sheet-wrap" id="creditsSheet" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="credH">
+        <div class="sheet-head"><h2 id="credH">Credits</h2><button class="btn" data-close type="button">Close</button></div>
+        <div class="credits">
+          <h3>Created and narrated by</h3>
+          <p>Ravid Tilles</p>
+          <h3>Map</h3>
+          <p>Coastlines and today's borders: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (public domain), via the <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">world-atlas</a> project.</p>
+          <p>Historical borders: simplified from <a href="https://github.com/aourednik/historical-basemaps" target="_blank" rel="noopener">historical-basemaps</a> by André Ourednik and contributors, licensed under the <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU GPL v3</a>. Historical borders are approximate, especially for ancient times.</p>
+          <h3>Jewish communities today</h3>
+          <p>Population figures (rounded): Sergio DellaPergola, “World Jewish Population,” <i>American Jewish Year Book</i>.</p>
+          <h3>Illustrations, design and code</h3>
+          <p>Made for this project with Claude. Fonts: Baloo 2, Nunito and Rubik from <a href="https://fonts.google.com/" target="_blank" rel="noopener">Google Fonts</a> (SIL Open Font License).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet-wrap" id="settingsSheet" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="setH">
+        <div class="sheet-head"><h2 id="setH">Settings</h2><button class="btn" data-close type="button">Done</button></div>
+        <label class="check"><input type="checkbox" id="optVoice" checked> Read the story aloud</label>
+        <label class="check"><input type="checkbox" id="optCC" checked> Show captions</label>
+        <div class="field"><label for="optVoiceSel">Voice</label><select id="optVoiceSel"></select>
+          <div class="grp" style="flex-wrap:wrap"><button class="btn" id="testVoice" type="button">Test the voice</button><span class="note" id="testState" style="margin:0"></span></div></div>
+        <div class="field"><label for="optRate">Speaking speed: <span id="rateVal"></span></label><input type="range" id="optRate" min="0.6" max="1.3" step="0.05"></div>
+        <div class="field"><span class="lbl">Scenes to include</span>
+          <p class="note" style="margin:0">The Holocaust scene is written gently for young children. You know your students best; untick it to skip.</p>
+          <div class="scene-list" id="sceneList"></div>
+        </div>
+        <p class="note"><button class="linkish" id="setCredits" type="button">Credits and sources</button></p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="rail" aria-label="Presentation controls">
+    <div class="grp">
+      <button class="btn" id="prev" type="button" aria-label="Previous scene"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+      <button class="btn play" id="play" type="button" aria-label="Play"><svg viewBox="0 0 24 24" id="playIcon"><path d="M7 4l13 8-13 8z"/></svg></button>
+      <button class="btn" id="next" type="button" aria-label="Next scene"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+    </div>
+    <div class="timeline" id="timeline" aria-label="Scenes"></div>
+    <div class="seg" role="group" aria-label="Version">
+      <button type="button" id="segK" aria-pressed="true">K–2</button>
+      <button type="button" id="segO" aria-pressed="false">Grades 3+</button>
+    </div>
+    <div class="grp">
+      <button class="btn" id="voiceBtn" type="button" aria-pressed="true" aria-label="Narration on or off"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button class="btn" id="scriptBtn" type="button"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zM14 3v5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12h8M9 16h8" stroke="currentColor" stroke-width="2"/></svg>Script</button>
+      <button class="btn" id="setBtn" type="button" aria-label="Settings"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="7" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="17" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+      <button class="btn" id="fsBtn" type="button" aria-label="Full screen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+  </nav>
+</div>
+<script>
+const LAND="226 586 233 585 220 579 222 582 219 583 219 585 226 586|239 355 257 353 258 351 263 353 262 350 248 349 236 353 236 355 239 355|234 390 241 386 246 380 229 388 234 390|345 356 339 353 341 350 330 346 323 350 329 354 345 356|191 578 188 577 189 574 181 569 183 571 181 576 185 578 191 578|126 558 122 555 124 553 121 552 121 548 119 548 110 557 116 560 118 557 119 560 122 561 126 561 126 558|106 556 108 553 106 551 99 554 99 555 106 556|31 398 35 397 31 393 24 396 29 399 32 400 31 398|-618 491 -630 492 -645 499 -629 497 -618 493 -618 491|-611 459 -609 460 -611 457 -607 458 -603 463 -598 460 -607 456 -615 457 -614 462 -605 470 -603 467 -605 463 -611 459|-773 185 -764 182 -762 179 -769 180 -772 177 -778 179 -783 184 -773 185|-661 184 -656 184 -660 180 -672 180 -672 185 -661 184|-638 465 -620 464 -625 462 -625 460 -630 461 -630 463 -636 462 -644 466 -640 471 -641 468 -638 465|-725 410 -719 411 -732 407 -740 406 -736 409 -723 412 -725 410|-800 229 -793 224 -775 219 -771 216 -774 216 -773 215 -757 211 -757 207 -749 207 -741 202 -751 199 -777 199 -771 204 -772 206 -781 208 -787 216 -800 218|96 409 98 405 96 392 91 392 90 390 86 389 84 392 85 398 82 409 87 409 92 413 96 409|95 428 96 422 92 414 88 416 86 424 93 427 94 430 95 428|156 382 151 375 153 371 151 367 124 378 127 382 138 380 156 382|-720 197 -710 199 -700 197 -697 193 -692 193 -696 191 -687 189 -684 185 -687 182 -693 184 -710 183 -714 176 -721 182 -735 182 -739 180 -745 184 -744 186 -728 184 -723 186 -728 191 -727 194 -734 198 -729 199 -720 197|-496 -2 -484 -3 -488 -14 -495 -15 -498 -18 -505 -18 -508 -12 -506 -11 -508 -9 -506 -3 -502 -1 -496 -2|-31 585 -40 580 -39 578 -41 576 -21 577 -18 575 -26 566 -33 564 -27 563 -38 561 -26 560 -17 556 -12 547 -1 541 -2 540 1 536 -7 537 3 533 4 532 0 529 11 530 17 528 16 521 4 515 14 514 14 512 2 508 -14 509 -20 506 -30 507 -34 506 -37 502 -42 504 -56 501 -42 512 -31 512 -24 517 -33 514 -44 517 -52 517 -52 519 -40 525 -41 529 -47 528 -43 531 -31 533 -31 534 -27 533 -31 535 -28 541 -32 541 -36 545 -35 548 -30 550 -50 548 -52 550 -47 555 -49 559 -46 559 -48 562 -52 559 -51 562 -57 553 -55 558 -56 561 -52 568 -57 565 -61 567 -57 569 -59 569 -56 572 -58 574 -56 575 -57 577 -56 579 -52 579 -54 581 -50 583 -50 586 -31 585|-72 551 -61 552 -57 548 -59 546 -55 545 -57 545 -56 543 -63 540 -60 529 -65 523 -63 522 -84 519 -84 517 -93 515 -98 515 -95 517 -101 516 -96 519 -103 518 -99 521 -104 522 -88 527 -99 526 -89 532 -101 534 -96 538 -99 539 -101 543 -85 542 -81 546 -88 547 -83 551 -77 553 -77 550 -73 554 -70 552 -72 551|-800 660 -800 651 640 650 640 254 614 251 605 254 578 257 573 258 569 270 564 272 548 265 537 267 525 276 513 281 501 302 496 300 490 305 488 300 480 300 481 296 477 294 481 294 488 277 502 267 500 267 502 263 500 261 507 249 510 260 513 262 515 259 516 251 513 246 513 243 521 240 541 242 564 264 564 250 566 245 572 239 588 235 598 223 585 204 582 206 579 202 578 190 568 188 564 180 555 178 551 170 541 170 526 165 522 162 522 157 494 146 487 141 480 140 468 135 457 133 450 128 439 126 435 127 432 133 429 149 427 152 428 165 423 174 417 180 408 198 397 204 393 210 390 219 391 226 385 237 375 243 372 248 372 253 352 280 346 281 350 296 342 278 332 286 326 300 324 296 329 286 335 279 340 266 352 245 358 239 355 238 357 229 368 221 373 211 372 201 375 188 386 181 395 155 398 151 399 155 402 150 412 146 433 125 433 120 425 115 432 116 443 105 449 104 458 108 466 107 474 112 501 115 508 120 513 118 510 104 514 104 509 103 508 94 480 45 460 25 437 9 414 -19 409 -20 408 -24 402 -27 397 -40 112 -40 98 -25 101 -25 96 -24 90 -13 93 -16 95 -16 91 -13 87 -6 89 -7 93 -4 94 3 98 0 100 2 93 6 96 6 96 11 94 11 98 19 99 31 96 38 97 39 97 41 94 39 90 41 89 46 86 45 83 49 83 46 73 45 71 47 72 45 69 44 68 47 69 44 61 43 55 48 54 53 55 55 52 55 55 56 51 56 44 63 35 64 37 66 13 61 9 58 3 58 -20 48 -32 51 -30 51 -32 54 -33 51 -41 53 -53 52 -51 51 -59 50 -75 44 -83 46 -117 71 -125 74 -125 78 -129 78 -133 84 -129 86 -132 86 -131 89 -137 95 -137 99 -144 102 -146 108 -149 110 -150 108 -151 111 -152 110 -154 112 -154 115 -151 116 -155 118 -151 120 -159 118 -163 121 -162 122 -168 125 -164 126 -168 126 -167 134 -164 133 -154 135 -164 134 -168 139 -166 140 -175 148 -171 149 -166 157 -161 175 -161 185 -165 194 -163 195 -162 202 -169 211 -171 209 -169 219 -164 226 -159 238 -149 247 -145 262 -136 267 -129 279 -116 283 -102 294 -97 301 -99 307 -98 314 -92 326 -85 333 -69 340 -59 358 -53 359 -53 356 -46 352 -34 352 -30 354 -28 351 -19 351 13 365 38 369 48 369 53 366 65 371 79 369 97 373 98 371 102 372 104 367 110 371 111 369 105 363 111 352 101 342 103 337 107 337 107 335 110 336 112 332 123 329 133 329 152 324 157 314 178 309 189 303 196 304 200 308 202 311 199 318 201 322 216 329 231 326 233 322 249 320 252 315 268 315 291 308 311 316 319 315 321 313 319 315 318 313 326 311 339 312 344 315 356 342 360 345 358 363 362 368 354 366 347 368 337 362 328 360 312 368 306 369 304 363 297 362 292 363 290 367 275 367 282 370 273 370 275 372 271 377 272 380 263 383 264 386 267 383 271 385 268 387 270 389 267 393 269 396 261 395 262 400 267 404 290 404 288 405 290 406 298 407 291 409 291 412 313 411 323 417 334 420 350 421 353 417 361 417 364 413 368 414 384 409 394 411 403 410 414 414 418 419 414 427 387 443 366 452 369 453 367 454 369 454 376 454 379 460 385 461 378 466 385 467 384 468 393 470 392 473 358 466 351 461 352 464 349 462 350 457 355 453 366 454 364 451 355 451 339 444 334 446 336 451 325 454 337 459 336 461 318 463 320 464 316 466 326 466 320 466 318 472 319 467 316 468 308 466 302 459 296 457 296 448 290 448 291 450 289 450 286 435 281 434 279 427 275 425 282 416 291 412 290 410 275 410 262 401 263 403 268 406 261 406 251 410 238 407 239 404 243 401 237 403 239 400 234 403 237 400 234 400 229 406 226 405 226 400 233 392 229 393 231 390 226 389 240 381 240 377 235 380 230 379 235 374 232 373 227 375 232 364 227 368 224 365 221 370 219 367 216 371 217 374 211 379 218 383 229 380 232 382 224 384 211 384 208 389 211 390 203 393 199 400 194 403 196 418 186 424 170 430 177 429 169 434 160 435 152 442 155 443 150 446 149 451 145 453 143 453 139 448 135 455 138 456 136 458 123 454 125 450 122 447 124 442 136 436 140 427 145 422 152 419 162 419 159 415 180 407 185 402 183 398 179 403 169 405 165 397 171 394 172 390 166 388 165 384 161 379 156 380 162 389 157 400 149 402 148 407 143 406 145 407 140 408 137 412 130 413 116 423 111 424 105 430 102 439 88 444 80 439 61 431 41 436 33 432 30 428 32 419 21 413 10 411 -1 399 -3 394 2 388 -5 383 -7 376 -16 374 -22 367 -44 367 -56 360 -64 366 -62 369 -64 368 -69 373 -78 370 -90 370 -88 374 -89 384 -87 384 -92 384 -93 387 -88 391 -91 387 -95 388 -87 408 -89 418 -87 423 -92 430 -77 438 -71 436 -16 434 -11 447 -12 447 -11 455 -5 450 -12 457 -10 457 -11 463 -21 468 -22 472 -17 472 -25 473 -24 475 -28 476 -43 478 -47 480 -43 482 -46 483 -42 483 -47 484 -47 485 -32 488 -27 485 -14 487 -19 497 -13 497 -11 494 4 494 1 495 2 497 14 501 18 509 34 514 42 514 35 515 43 515 40 516 42 516 40 519 45 523 48 529 55 533 68 534 72 533 71 534 72 537 76 537 80 537 82 534 83 536 85 534 86 539 98 536 86 543 90 545 87 548 87 553 81 556 82 566 87 565 89 567 92 567 91 570 88 567 83 568 86 571 94 572 106 577 103 566 109 564 104 563 102 559 96 555 97 553 95 550 100 547 99 545 110 544 109 540 114 539 126 545 130 544 146 536 146 538 139 539 138 541 144 539 181 548 188 547 184 547 188 544 194 544 200 549 207 551 211 556 206 550 212 549 210 566 217 576 226 577 236 570 244 573 243 578 245 584 238 584 235 587 237 588 234 589 235 592 255 596 279 594 281 598 283 597 291 600 302 599 297 602 286 604 285 607 265 604 266 606 258 603 230 598 232 600 229 602 225 600 226 604 214 606 216 616 213 620 213 623 211 626 217 630 215 632 223 633 225 636 236 640 246 648 254 650 253 655 247 657 246 659 224 659 223 656 214 653 216 651 211 648 215 645 208 639 186 632 183 630 185 629 179 629 180 626 174 625 176 622 175 617 171 616 172 607 180 606 190 598 180 594 186 594 183 591 170 587 162 586 169 585 167 584 165 571 160 562 147 561 142 558 143 555 142 554 129 554 130 557 125 563 128 563 127 564 129 566 112 584 111 590 114 591 108 592 106 598 102 590 96 591 97 590 82 581 67 581 66 581 67 583 56 586 56 590 64 590 59 591 64 595 52 592 52 596 62 598 57 599 61 602 65 604 65 602 70 605 62 603 51 596 52 601 57 601 51 604 56 607 51 606 50 610 68 611 70 610 76 612 73 613 74 614 73 612 53 611 50 614 53 615 49 618 67 619 53 619 51 622 66 624 61 624 64 626 75 625 81 627 67 627 76 631 86 628 82 632 86 633 84 635 86 636 108 635 107 636 114 638 112 639 114 640 101 635 96 638 115 647 113 648 115 650 127 652 129 653 124 652 121 654 127 659 346 660 348 658 344 654 350 648 349 646 374 638 381 641 380 643 372 644 366 648 369 652 398 646 404 648 398 653 398 656 409 660|507 469 493 465 487 461 487 459 475 457 475 455 467 445 473 441 475 436 476 439 475 430 477 427 495 408 504 403 496 402 494 393 492 390 490 391 489 384 491 377 518 366 540 368 539 389 537 392 532 393 532 396 536 395 535 399 530 400 530 398 527 404 529 410 539 406 544 407 547 411 541 415 538 421 530 420 529 412 525 419 526 428 513 432 508 442 503 444 504 446 515 445 510 449 514 454 532 453 528 456 532 467 529 470 521 468 512 471 507 469|-147 660 -148 658 -144 658 -145 656 -136 655 -138 654 -136 651 -140 648 -144 647 -145 645 -149 643 -187 634 -202 636 -204 638 -212 639 -227 638 -227 641 -221 641 -215 644 -221 643 -216 646 -222 645 -225 648 -240 649 -219 650 -218 652 -225 652 -218 654 -245 655 -239 655 -241 658 -233 658 -238 658 -235 659 -238 660 -214 660 -214 657 -217 657 -211 653 -208 656 -205 656 -204 660 -195 658 -194 660 -185 660 -181 657 -182 660 -175 660|-610 101 -619 101 -615 103 -617 107 -611 108 -609 108 -610 101|-626 660 -624 658 -627 656 -635 659 -637 657 -633 656 -636 649 -643 652 -643 654 -646 651 -651 655 -654 658 -650 660 -683 660 -679 658 -679 656 -671 654 -673 653 -667 648 -666 650 -662 647 -659 649 -653 646 -655 645 -651 644 -656 643 -647 640 -648 639 -644 637 -647 632 -652 638 -651 632 -647 629 -652 629 -651 626 -667 633 -667 631 -679 637 -678 634 -689 637 -660 622 -663 619 -685 623 -696 628 -713 631 -720 634 -714 636 -725 638 -735 644 -733 646 -741 644 -747 648 -749 648 -747 645 -757 645 -767 642 -780 645 -782 647 -781 649 -774 652 -773 655 -758 652 -755 648 -754 650 -758 653 -736 655 -743 660|-800 512 -793 508 -797 513 -793 516 -789 512 -787 515 -790 518 -784 523 -791 537 -790 540 -797 547 -778 553 -765 564 -766 572 -769 578 -785 587 -778 594 -777 597 -773 596 -775 597 -773 600 -776 601 -775 601 -777 604 -775 605 -778 606 -776 608 -782 608 -775 616 -780 618 -781 623 -774 626 -746 621 -737 625 -727 621 -728 618 -722 618 -720 617 -722 616 -716 616 -719 614 -714 612 -703 611 -700 609 -695 610 -694 608 -698 605 -697 601 -707 600 -697 599 -697 593 -693 593 -695 589 -702 588 -687 589 -684 587 -684 582 -690 579 -684 581 -680 585 -679 583 -681 581 -678 584 -677 580 -664 588 -660 584 -660 588 -654 591 -657 592 -654 593 -655 595 -650 594 -654 595 -654 598 -650 598 -652 599 -648 603 -645 603 -648 600 -643 601 -642 597 -641 598 -638 595 -639 594 -634 592 -640 591 -632 591 -633 589 -629 587 -635 583 -626 585 -633 580 -625 582 -620 579 -620 576 -625 575 -619 574 -620 572 -613 570 -614 567 -625 568 -614 564 -617 562 -614 562 -615 560 -603 558 -602 555 -606 551 -598 553 -594 552 -598 548 -593 552 -588 548 -580 549 -574 546 -586 540 -604 537 -601 535 -603 533 -579 541 -583 542 -574 542 -571 538 -575 536 -573 535 -565 538 -560 535 -558 526 -563 525 -557 525 -560 524 -557 522 -570 515 -585 513 -601 503 -665 502 -669 500 -674 493 -683 492 -697 482 -710 485 -699 482 -700 477 -713 468 -743 455 -740 453 -747 450 -736 454 -732 460 -721 466 -705 470 -688 484 -666 491 -655 493 -643 489 -645 488 -642 487 -643 484 -653 480 -659 482 -667 480 -659 479 -656 477 -647 477 -653 471 -648 471 -645 462 -628 456 -620 459 -614 456 -615 454 -610 453 -636 447 -636 445 -643 445 -643 443 -655 435 -661 438 -662 441 -659 446 -661 445 -644 453 -641 450 -641 452 -634 454 -649 454 -643 458 -646 459 -648 456 -659 452 -660 454 -664 451 -671 452 -670 448 -681 444 -684 445 -685 443 -688 443 -688 446 -692 440 -702 438 -708 428 -706 426 -710 423 -704 418 -700 418 -701 421 -699 417 -707 415 -707 417 -712 415 -711 417 -714 418 -715 414 -729 413 -740 408 -740 412 -739 409 -743 405 -740 404 -741 398 -741 400 -749 389 -749 391 -755 395 -751 400 -755 398 -756 395 -750 384 -759 372 -757 380 -759 380 -759 384 -763 384 -760 386 -763 387 -762 392 -759 395 -766 393 -764 384 -767 385 -763 381 -772 384 -770 389 -773 386 -773 384 -763 379 -765 377 -771 382 -763 374 -765 373 -768 375 -763 371 -764 370 -773 373 -767 372 -765 369 -760 369 -755 358 -759 367 -758 361 -761 363 -766 360 -767 362 -767 360 -761 360 -761 357 -759 360 -758 358 -762 354 -770 355 -765 353 -768 350 -771 352 -770 350 -764 348 -773 346 -774 347 -779 339 -780 342 -780 339 -788 337 -800 326 -800 93 -796 96 -781 92 -768 79 -769 86 -760 94 -756 94 -755 102 -757 101 -754 106 -748 111 -743 110 -744 108 -741 113 -733 113 -716 124 -713 123 -711 120 -720 116 -716 107 -721 98 -716 90 -712 92 -711 97 -715 105 -715 110 -698 115 -698 117 -702 116 -703 119 -700 122 -696 115 -688 114 -684 112 -681 105 -662 106 -659 103 -651 101 -637 105 -643 106 -619 107 -629 105 -627 101 -625 102 -623 98 -621 100 -617 96 -616 99 -608 94 -612 86 -616 86 -613 84 -602 86 -588 77 -585 73 -587 64 -584 69 -580 68 -572 62 -572 55 -570 60 -559 57 -558 60 -544 59 -541 58 -542 54 -538 58 -529 54 -521 47 -520 44 -518 46 -517 41 -515 43 -512 41 -507 21 -500 17 -499 12 -513 -1 -520 -14 -527 -16 -519 -16 -509 -9 -507 -18 -504 -20 -493 -17 -496 -27 -492 -19 -487 -15 -484 -15 -485 -11 -481 -7 -473 -6 -455 -14 -453 -17 -451 -15 -447 -17 -445 -21 -448 -23 -444 -22 -444 -24 -447 -32 -442 -25 -442 -28 -432 -24 -415 -29 -400 -29 -382 -40 -800 -40 -800 -32 -797 -26 -798 -21 -800 -26 -800 8 -789 12 -790 16 -788 18 -786 18 -786 24 -778 27 -771 39 -775 42 -773 47 -775 55 -772 58 -775 62 -774 66 -784 81 -781 84 -778 81 -781 85 -784 84 -786 87 -792 90 -800 84|-795 624 -793 622 -798 616 -800 617 -800 624 -795 624|-555 515 -560 513 -558 510 -567 501 -568 496 -562 501 -562 499 -555 500 -561 496 -559 497 -561 495 -552 495 -554 491 -545 495 -544 493 -536 493 -536 491 -542 488 -537 487 -541 484 -530 486 -539 480 -536 480 -539 478 -537 476 -529 481 -532 475 -528 478 -527 475 -531 467 -536 466 -536 471 -542 469 -539 474 -542 479 -545 474 -545 475 -549 474 -553 469 -558 469 -559 470 -548 477 -556 475 -561 475 -559 478 -568 476 -593 476 -593 479 -583 485 -592 486 -588 487 -587 486 -584 491 -580 490 -582 494 -578 495 -579 497 -570 510 -560 516 -555 515|-360 660 -378 656 -380 657 -378 660 -385 660 -382 657 -402 656 -396 653 -399 651 -411 651 -402 645 -408 642 -416 643 -406 641 -405 637 -410 635 -414 631 -422 632 -416 630 -419 627 -429 627 -422 626 -423 622 -421 619 -426 617 -423 616 -427 608 -430 605 -439 606 -432 604 -431 601 -440 600 -437 599 -439 598 -444 599 -442 603 -446 600 -454 602 -448 607 -454 604 -460 606 -459 612 -469 608 -482 608 -478 610 -484 610 -493 616 -494 619 -488 621 -496 620 -496 622 -503 625 -503 627 -498 630 -504 628 -515 638 -515 640 -503 642 -516 641 -517 642 -514 645 -505 647 -500 644 -501 647 -505 648 -510 652 -508 647 -513 648 -518 642 -521 643 -523 652 -525 653 -511 658 -526 655 -532 656 -531 660 -533 660";
+const BORDERS="428 164 432 167 432 174 434 175 439 173 451 174 467 173 471 169 474 171 482 182 490 186 520 190|520 190 531 166|-600 85 -598 82 -607 75 -604 70 -611 67 -611 62 -614 59 -607 52|-607 52 -606 49 -610 45 -622 41 -625 41 -627 40 -629 36 -633 39 -640 39 -648 43 -642 36 -640 25 -634 24 -634 22 -640 19 -642 15 -651 11 -655 7 -657 10 -663 8 -669 12|-669 12 -672 24 -676 28 -679 28 -673 34 -679 45 -678 53 -675 62 -679 63 -694 61 -701 70 -720 70 -725 75 -724 82 -728 91 -734 92 -727 108 -720 117 -713 119|640 391 625 400 619 411 601 414 602 418 599 420 600 422 594 423 586 428 582 426 585 423 580 425 578 422 573 421 570 419 570 413 560 413|560 413 560 450 586 456 610 444 620 435 638 436|-747 450 -715 450 -713 453 -709 453 -703 459 -700 467 -692 475 -689 472 -683 474 -678 471 -678 457 -674 456 -674 452 -671 452|-798 425 -789 429 -792 435 -787 436 -768 436 -761 443 -747 450|-62 541 -67 541 -70 544 -74 541 -81 544 -72 551|564 250 561 247 560 250 558 249 558 242 560 241 555 239 552 227|552 227 526 229 516 243|561 261 563 257|297 453 294 454 288 452 282 455|282 455 285 455 289 460 290 465 301 464 296 470 295 473 291 475 291 480 275 485 266 483|266 483 250 477 246 479 232 481 229 479|229 479 221 484|221 484 225 491|225 491 229 491 227 496 241 505 241 509 236 515|236 515 244 519 258 519 271 518 277 515 282 516 287 514 291 516 293 514 302 515 305 513 308 519 318 521|318 521 321 521 324 523 337 523 344 518 341 517 342 513 353 510 356 504 361 504 366 502 374 504 380 499 383 501 401 496 401 493 397 490 400 488 396 486 400 483 398 479 389 479 384 476 382 471|339 -10 305 -11|305 -11 299 -15 296 -14|296 -14 299 8 313 20 312 23 307 25 308 35|308 35 312 38 318 38 321 35 330 39 335 38 340 42|340 42 344 37 344 32 349 26 350 18 348 12 345 10 339 2 339 -10|639 360 631 358 631 354 623 352 620 354 613 356|613 356 611 366 603 366 593 375 583 377 574 380 572 382 554 381 547 375 539 373|525 418 531 421 541 423 549 420 554 413 560 413|415 415 425 414 428 416 434 411|434 411 437 407 436 405 437 401 443 400 448 397|448 397 446 398 444 394 440 394 443 384 445 383 442 379 446 377 448 371|448 371 443 370 441 373 428 374 424 371|424 371 422 373 407 371 394 367 382 369 374 366 367 368 366 362 362 358 359 359|260 407 266 414 263 417|263 417 272 421 275 419 280 420|115 332 115 324 103 317 101 315 102 308 95 302|95 302 90 321 83 325 75 338 75 341 82 347 84 352 82 358 84 364 82 365 86 369|9 110 8 104 13 100 14 94 16 91 15 70 18 63 16 62|12 61 5 69 7 84 4 88 5 94 2 95 4 103 -1 107 -1 111|-1 111 9 110|302 -40 308 -32 308 -30 304 -29 306 -24|306 -24 308 -23 309 -21 308 -16 305 -11|339 -10 376 -30 376 -35 382 -40|424 371 413 364 414 356 410 344 388 334|388 334 368 323 358 327|358 327 359 334|359 334 360 337 364 338 366 342 364 347 360 346|95 475 95 473|95 473 96 471|96 471 105 469|105 469 104 465 101 466 101 462 93 465 90 458 84 464 78 459 70 459|70 459 68 464 60 462 70 475 76 476|76 476 84 476 86 478 95 475|114 590 116 589 118 593 117 596 125 601 126 605 123 610 127 611 129 614 122 617 123 623 121 626 122 630 120 633 128 640 140 640 141 642 141 645 136 646 145 653 146 659|241 660 242 658|-542 54 -545 48 -544 41 -540 34 -542 28 -546 23|-546 23 -550 26 -557 24 -560 25 -561 23 -559 19 -565 19|-565 19 -572 29 -573 34 -576 34 -581 41 -579 49 -573 50 -572 55|308 35 297 46 292 44 287 45 282 44 274 51|274 51 271 57 265 61 264 66 253 74 252 78 249 81 243 83 241 87|241 87 245 89 248 98 252 103 259 104 267 95 279 96 280 93 288 93 290 96 295 98 296 101 300 103 308 97 312 98 324 111 323 117 321 120 327 120 327 122 332 122 331 107 339 102 339 95 341 95|341 95 341 85 333 84 330 79 339 75 347 67 353 55|353 55 340 42|241 87 235 88 236 98 229 109|229 109 229 113 226 116 224 125 218 128 222 133 221 138 225 142 224 146 229 152 229 155 231 157 240 157 240 195|240 195 240 200 250 200 250 220|250 220 312 220 314 222 314 220 369 220|386 180 382 176 375 173 374 171 370 171 369 163 364 151 365 143|365 143 361 128 357 126 351 118 349 109 348 107 346 109 343 107 341 95|-18 434 -14 432 -15 431 -6 428 6 427 7 428 14 426|14 426 14 424 17 425|17 425 20 424 32 424|-74 372 -74 377 -70 382 -73 385 -70 391 -75 397 -70 398 -70 402 -68 403 -69 410 -62 415 -65 417 -66 419 -82 418 -83 421 -88 419|415 -17 410 -9 410 28 419 40|419 40 429 43 435 48 449 49 480 80|480 80 489 95 489 113|480 80 470 80 440 90 428 102 427 106 429 110|429 110 432 115|221 484 205 485 199 481 196 482 188 480 187 478 178 478 171 480|171 480 169 484 170 486|170 486 171 488 178 489 188 495|188 495 192 494 194 496 198 492 201 492 204 494 216 494 225 491|165 465 156 462 157 459 153 457 153 455 146 457 144 455 136 455|137 456 139 456 135 460 136 462 134 463 137 465|137 465 145 464 149 466 160 467 161 469|161 469 165 465|-103 85 -106 78 -115 69|-133 90 -130 91 -124 99 -113 100 -107 93 -105 87 -107 83 -103 85|227 442 224 438 230 432 225 428 225 424 223 423|223 423 216 422|216 422 218 427 214 428 208 433 203 428|203 428 192 435|192 435 195 436 192 440 196 440 191 444 193 449 190 449|190 449 191 452 194 452 190 454 189 459|189 459 196 462 202 461|202 461 208 457 208 455 215 451 214 450 215 449 214 448 221 445 226 447 227 446 225 444 227 442|-123 148 -120 142 -121 136 -118 133 -116 134 -114 129 -114 124|-114 124 -124 123 -137 127|-137 127 -152 127 -167 124|-168 131 -158 132 -158 133 -152 136 -142 132 -138 133 -140 135 -144 135 -150 138 -155 136 -166 136|-165 158 -162 165 -145 167 -139 161 -134 161 -132 156 -123 148|350 294 361 292 368 299 375 300 380 305 370 315 391 321|391 321 404 319 421 311 447 292 465 291|465 291 474 290 477 285 484 285|508 248 510 246 513 246|552 227 556 220 550 200 520 190|306 -24 299 -23 297 -28 291 -26 290 -27|290 -27 289 -24 291 -22 292 -17 296 -14|638 542 611 540 610 536 615 535 612 533 621 530 610 530 608 527 610 523 600 519 616 513 614 509 609 507 601 508 595 505 584 511 578 511 574 509 565 510 557 506 546 510 546 505 541 510 533 515 526 515 522 517 513 515 508 517 502 513 486 506 488 499 483 499 475 504 469 497 468 494 470 492 467 488 467 484 471 482 473 477 482 477 490 468 486 468 485 466 492 463|486 418 478 412 473 413 464 419|464 419 456 422 457 425 449 428 448 426 445 427 438 426 438 427 428 432 416 432 406 435 400 434|318 521 316 528 313 530 314 532 321 531 327 534 324 537 318 538 318 540 308 548 310 551 308 553 309 556 302 558 295 557 294 559 281 561|281 561 281 565 276 568 278 573 274 575|274 575 278 579 275 582 274 588 282 594 280 595|278 605 309 623 315 629 300 637 305 641 300 645 301 647 296 650 298 651 296 652 297 656 301 658|212 553 226 551 228 549 228 544|228 544 196 545|209 553 210 553|286 437 271 442 255 437 229 438 230 441 227 442|202 461 211 463 220 475 229 479|266 483 270 482 281 470 282 466 281 456 282 455|188 495 186 499 176 501 177 503 169 504 170 502 166 501 162 504 164 506 163 507 150 510 148 509|148 509 150 513 146 518 148 521 146 525 141 529 144 532 143 537|142 539 142 540|228 544 234 542 235 539|235 539 239 528 232 523 237 520 236 515|-786 -40 -783 -34 -782 -35 -779 -30 -767 -26 -756 -15 -754 -9 -752 -10 -753 -6 -756 -1 -753 -1|-753 -1 -748 -2 -742 -10 -737 -12 -729 -24 -722 -24 -718 -22 -714 -23 -710 -22 -701 -27 -707 -38 -702 -40|-774 87 -775 85 -772 80 -775 76 -778 77 -779 72|616 252 618 262 624 266 632 267 633 272 628 273 628 282 619 285 608 299|608 299 625 294 640 294|136 137 141 131|141 131 142 124 146 122 146 115 139 111 135 106 128 88 122 83 118 73 119 71 112 64 106 71 98 68 90 59 86 48|27 64 28 90 30 91 38 106 35 114 36 117|36 117 36 125 40 129 41 135 47 137 55 139 63 137 69 130 78 133 87 129 96 128 105 133 114 134 125 131 129 134 136 137|36 117 28 124 24 122 24 119|24 119 21 123 22 125 21 127 16 126 10 130 10 134 12 134 4 140 2 145 2 149|2 149 9 150 13 153 35 154 38 157 42 170 42 191|42 191 58 195 75 209 120 235|120 235 135 232 142 226 150 230|150 230 152 215 160 203 157 199 155 169 144 157 134 144 136 137|60 508 56 508 58 512 50 515 42 514|72 533 70 527 67 526 70 524 67 521 68 520 59 518 62 515 61 511 59 510 60 508|42 514 39 512 33 514|-22 351 -18 348 -17 333 -14 328 -11 325 -12 321 -29 321 -30 318 -38 317 -37 310 -50 305 -54 300 -65 298 -66 296 -72 296 -87 287 -87 277|-87 277 -87 273|-87 273 -87 260 -120 260 -120 235 -126 233 -132 228 -130 213 -170 213 -170 208|203 428 201 428 201 425|201 425 198 425 197 426 193 422 193 419|185 424 184 426|184 426 185 430 189 433 190 433 190 435 192 435|-87 273 -48 250|-48 250 -66 250 -56 166 -54 163 -55 155 -92 155 -94 157 -94 155 -107 154 -109 152 -115 156 -119 149 -123 148|-48 250 11 211 12 208 18 203 31 199 33 194 31 192 33 190 42 191|2 149 -8 150 -20 145 -21 142 -26 142 -30 136 -32 137 -33 133 -42 133 -43 131 -42 128 -45 127 -44 123 -53 118 -55 104|-55 104 -62 102 -63 107 -64 106 -67 107 -67 103 -69 103 -70 101 -75 104 -80 102|-80 102 -83 105 -83 110 -87 110 -84 114 -88 117 -90 124 -94 125 -94 123 -98 120 -103 122 -107 119 -109 122 -113 120 -115 122 -114 124|223 423 230 417 229 413|229 413 216 409 210 409|210 409 205 413 206 419|206 419 216 422|61 501 65 498 63 495|63 495 58 495|58 495 57 499 61 501|210 561 221 564 241 563 248 564 266 557|266 557 265 553 268 553 258 548 255 543 257 542 255 543 243 539 235 539|95 473 96 471|252 317 249 313 250 308 247 302 250 292 250 220|240 195 160 234 150 230|120 235 115 243 103 246 100 253 94 261 95 263 99 266 97 273 99 278 98 292 93 301 95 302|-103 85 -98 85 -95 83 -95 74 -91 72 -89 73 -87 77 -85 76|-85 76 -83 70 -86 65 -79 62 -78 60 -75 58 -75 44|359 334 354 331 351 331|243 579 253 580 265 575 274 575|281 561 276 558 266 557|465 291 471 300 480 300|206 419 205 422 201 425|353 55 357 53 358 48 360 45 369 44 381 36 395 35 398 39 408 43 411 40 419 40|388 334 390 323 393 322 391 321|350 296 355 315|355 315 356 324|356 324 356 326 358 327|105 469 110 468 112 470 122 471 124 467 137 465|75 438 76 442 69 443 70 448 66 451 71 454 68 457 70 459|349 295 342 312|342 312 342 313|448 371 454 360 463 358 460 356 461 351 455 346 454 340 460 334 461 330 474 324 478 318 477 310 480 310 480 305 485 300|613 356 611 349 607 345 609 343 605 341 605 336 609 335 606 331 608 322 608 315 617 314 618 309 608 299|448 397 455 390 461 389|461 389 465 389|465 389 480 397 483 394 481 392 483 390 480 389 486 384 489 384|189 459 178 458 165 465|161 469 165 470 164 474 167 475 164 477 171 477 171 480|-718 197 -716 192 -717 187 -720 186 -718 183 -718 180|-565 19 -573 20 -580 15 -583 16 -588 12 -592 14 -597 19 -600 27 -599 36 -595 39 -597 44 -601 45 -600 51 -601 52 -607 52|-137 127 -137 123 -139 122 -137 117 -147 115 -150 109|-80 102 -82 100 -81 95 -79 94 -78 91 -80 88 -77 84 -82 85 -83 83 -80 81 -82 76 -85 76|200 397 202 397 203 400 207 401 210 406 210 409|229 413 245 416 253 412 259 413 262 414 261 417 263 417|-30 51 -28 52 -28 54 -30 57 -32 68 -28 79 -25 82 -27 95|-27 95 -28 110 -6 109 -3 112 -1 111|76 476 76 482 81 490 67 492 63 495|61 501 63 505 60 508|87 549 97 548|148 509 143 510 144 509 123 502 121 503 125 499 124 497 127 494 138 488|138 488 137 485 135 486 134 484 128 481 130 475 122 477 110 474 104 476 102 473 100 475 95 475|464 419 462 417 467 413 465 411 453 414 450 413|450 413 434 411|133 22 132 13 142 14 144 9 139 4 139 -2 145 -6 144 -19 140 -25 137 -21 135 -24 130 -23 126 -18 124 -19 124 -23 116 -23 115 -28 119 -33 119 -37 115 -35 111 -39|96 10 113 10 113 22|113 22 116 23 133 22|17 425 14 426|25 511 28 508 31 508 37 503 42 502 41 500 48 502 49 498 58 495|-517 41 -529 22 -538 24 -541 21 -546 23|-630 181 -631 181|365 143 373 145 376 141 379 149 384 144 390 146 392 145 401 145 408 141 424 125|424 125 418 117 418 110 429 110|431 127 427 124 424 125|98 23 100 22 113 22|-789 15 -777 8 -774 4 -765 2 -763 4 -753 -1|170 486 151 490 147 486 138 488|340 351 327 352|190 449 187 451 169 453 163 450 158 452 157 448 163 441 173 434 176 429|177 429 184 426|-55 104 -46 97 -32 99 -27 95|158 -40 161 -35 162 -22 169 -12 178 -5 181 20 186 35|186 35 186 43 195 51 202 48 206 45 224 41 229 47 234 47 243 50 251 50 255 53 274 51|290 -27 292 -31 292 -39|133 22 146 22 157 19 161 17 162 23|162 23 166 35 175 37 186 35|-669 12 -671 12 -671 16 -674 21 -679 17 -682 20 -682 17 -698 17 -699 11 -693 11 -692 6 -701 6 -701 -1 -696 -5 -694 -12 -699 -40|229 109 225 110 218 106 216 102 203 91 190 89 191 87 186 80 176 80 168 76 165 79 160 75 155 75|155 75 156 78 151 86 140 97 142 100 157 100 151 106 151 118 148 125 145 130 141 131|162 23 161 29 151 38 151 43 147 46 146 59 144 60 155 75|24 119 20 114 14 114 9 110|448 397 458 395 461 389|465 389 465 396 456 400 459 400 460 402 455 405 454 407 456 408 451 411 452 411 450 413";
+const ERAS={"bc2000": "city-states#433 357 412 351 408 342 410 334 372 338 357 343 357 362 381 374 405 379 420 377 433 357|Ur#501 301 495 300 490 304 487 300 480 299 480 295 476 293 419 322 411 329 408 342 412 351 428 357 452 355 495 316 501 301|Elam#558 270 546 264 516 278 493 318 560 298 558 270|Canaan#366 340 366 307 357 300 347 299 340 311 345 316 355 341 357 343 366 340|Egypt#326 299 323 295 337 245 325 220 302 220 311 250 294 308 310 315 317 314 321 310 330 311 336 310 326 299|Hurrian Kingdoms#420 377 422 385 432 383 443 378 465 358 456 352 452 355 433 357 420 377|Hittites#397 410 396 399 388 389 337 386 304 394 299 407 290 410 292 412 312 411 327 418 349 420 373 410 397 410", "bc700": "Egypt#326 299 323 295 337 245 336 240 307 240 306 252 309 260 300 280 299 296 294 308 310 315 317 314 321 310 330 311 336 310 326 299|Elam#557 270 546 264 514 280 501 301 495 300 490 304 495 325 506 327 519 323 543 307 560 303 560 271 557 270|Kingdom of David and Solomon#351 332 363 344 366 357 377 363 394 359 394 350 375 336 362 303 354 295 348 292 337 310 345 316 351 332|Assyria#430 378 453 372 461 347 440 334 429 333 408 352 408 363 412 370 420 376 430 378|Babylonia#440 334 461 347 482 336 495 325 481 310 444 317 440 334|Thrace#270 420 279 420 281 416 291 412 288 409 275 410 270 406|Phrygians#277 369 282 376 276 386 277 405 291 403 289 406 299 407 293 407 290 410 292 412 312 411 332 419 350 420 357 416 320 401 311 390 304 361 295 361 290 367 280 365 280 369 277 369|Urartu#415 414 417 418 445 412 448 408 497 402 495 393 453 372 430 378 415 377 408 369 384 367 412 399 405 410 415 414|Hittites#388 368 384 361 377 363 366 357 363 344 351 332 359 344 356 354 359 358 357 361 361 365 360 367 352 364 345 366 338 361 326 360 314 367 306 368 306 376 311 390 320 401 360 417 364 412 373 410 405 410 412 399 384 367 388 368|Greek city-states#270 388 270 404 276 403 276 386 282 376 277 369 273 369 275 371 270 379", "100": "Boihaenum#190 499 194 476 178 471 159 479 165 496 179 504 190 499|Dacia#217 448 229 473 251 477 273 469 271 461 256 456 257 439 231 439 230 447 217 448|Armenia#454 380 417 385 420 418 470 414 490 403 497 402 493 390 491 392 490 389 454 380|Bosporian Kingdom#351 449 340 445 334 446 335 451 350 454 365 454 351 449|Parthian Empire#500 300 493 301 492 305 487 300 480 300 436 325 431 354 414 357 417 385 446 380 490 389 488 375 500 372|Roman Empire#15 520 3 515 14 514 9 509 -20 506 -31 507 -32 512 -28 516 -35 515 -52 519 -41 524 -41 527 -46 528 -45 530 -29 533 -29 542 -35 543 -34 546 -16 549 -3 540 -3 536 3 531 0 528 16 527 15 520;241 355 257 351 263 353 262 350 247 349 235 353 237 357 241 355;84 393 85 402 82 408 93 412 98 406 96 395 88 390 84 393;86 425 94 429 92 413 86 417 86 425;334 353 345 356 338 352 339 350 329 345 323 347 321 350 334 353;269 405 261 400 266 405 260 409 244 410 236 408 243 402 236 403 238 400 233 403 236 399 233 400 229 407 225 405 225 401 232 392 229 394 229 390 225 389 238 383 240 378 235 381 229 379 234 375 226 376 230 366 224 365 220 370 216 370 212 379 219 383 227 380 231 382 212 383 208 389 212 390 202 394 194 403 196 418 170 433 161 434 145 453 139 448 135 455 138 456 132 457 122 453 125 449 123 443 136 435 147 420 162 418 160 414 180 406 185 401 184 397 178 402 169 405 165 397 171 394 172 390 166 388 161 379 156 380 158 386 162 388 157 401 126 415 107 429 99 441 89 444 65 432 56 430 41 435 35 433 30 428 31 419 9 410 -4 394 2 387 -7 382 -8 376 -16 374 -22 367 -44 367 -57 360 -69 371 -90 370 -88 384 -92 384 -90 389 -95 388 -87 410 -89 418 -86 424 -92 432 -83 434 -80 437 -19 433 -11 446 -12 455 -7 450 -12 457 -12 462 -21 469 -25 475 -44 478 -47 481 -43 481 -46 483 -44 484 -48 486 -31 489 -26 486 -15 487 -19 497 -13 497 -12 493 0 493 3 495 2 497 16 502 16 508 37 513 51 521 69 516 69 510 76 505 77 500 83 499 85 494 79 489 77 484 80 483 86 481 122 491 148 482 158 485 161 484 159 479 178 471 189 474 189 456 202 453 204 448 209 447 212 449 230 447 231 439 253 438 280 444 282 455 297 454 287 445 284 435 280 434 275 425 281 416 291 412 290 410 275 410 269 405;153 371 146 368 125 378 133 382 138 380 154 382 151 375 153 371;481 300 476 293 481 293 483 289 445 293 429 310 393 320 379 316 376 320 368 303 343 314 359 344 357 361 361 366 352 364 345 366 338 361 332 360 309 368 306 368 304 361 295 361 290 367 280 365 280 369 273 369 275 371 272 374 271 379 264 381 265 384 270 384 267 386 270 388 266 393 270 395 261 395 261 399 271 404 291 403 289 406 299 407 293 407 290 410 292 412 312 411 332 419 350 420 364 412 383 409 404 410 420 418 414 357 431 354 436 325 481 300;324 298 326 288 352 244 337 240 304 240 284 277 267 286 223 300 186 294 98 329 86 340 80 355 -86 331 -70 339 -59 357 -56 359 -46 352 -30 354 -20 351 11 365 37 368 54 367 63 371 79 368 97 373 104 367 110 371 105 361 111 352 100 341 104 336 126 327 150 324 158 313 174 310 189 302 200 307 201 320 217 328 229 326 232 321 248 319 253 314 261 315 290 308 308 314 317 314 324 311 324 298|Curonians#227 560 220 550 212 549 211 560|Alans#389 442 391 455 396 460 469 447 475 435 477 439 476 430 500 403 490 403 470 414 417 418 414 428 389 442|Nabatean Kingdom#324 311 336 310 343 314 368 303 376 320 385 309 361 267 351 281 348 281 351 294 348 292 343 278 341 278 325 298 324 311", "1100": "Cyprus#338 352 339 350 329 345 323 347 321 350 345 356 338 352|Sardinia#88 390 84 393 85 402 82 408 93 412 98 406 96 395 88 390|Hungary#162 457 166 473 165 482 174 490 181 489 185 496 194 498 199 495 200 498 218 497 220 495 216 491 256 482 274 475 276 469 274 463 265 458 231 450 221 444 203 449 179 448 178 451 168 449 159 456 162 457|Corsica#94 428 95 420 90 414 85 424 92 427 93 430 94 428|Byzantine Empire#400 380 376 372 369 354 359 345 356 354 359 358 357 361 361 365 360 367 352 364 345 366 338 361 332 360 309 368 306 368 304 361 295 361 290 367 280 365 280 369 273 369 275 371 272 374 271 379 264 381 265 384 270 384 267 386 270 388 266 393 270 395 261 395 262 400 268 404 291 403 289 406 299 407 293 407 290 410 292 412 312 411 332 419 350 420 353 417 360 417 364 412 373 410 400 410|Duchy of Benevento#149 420 154 419 158 406 154 400 149 402 147 407 143 406 144 409 141 408 135 413 140 414 136 419 149 420;146 368 126 376 125 379 133 382 138 380 154 382 151 375 153 371 146 368|Fatimid Caliphate#57 328 5 325 9 331 12 359 16 365 37 368 54 367 63 371 79 368 97 373 104 367 110 371 105 361 111 352 100 341 104 336 126 327 150 324 158 313 174 310 189 302 200 307 201 320 217 328 229 326 232 321 248 319 253 314 261 315 290 308 310 315 317 314 321 310 336 310 345 316 355 341 370 357 384 351 372 336 365 312 366 298 374 278 387 260 367 260 354 277 348 281 350 295 342 278 333 286 326 299 323 295 343 260 282 260 274 272 254 280 217 281 170 288 79 326 57 328|Burgandy#83 442 69 438 69 449 59 453 54 459 55 461 53 463 57 465 60 480 68 480 73 475 84 475 85 461 75 454 77 447 83 446 83 442|Croatia#145 458 148 459 149 455 159 456 168 449 166 434 154 439 151 442 155 442 144 453 145 458|Bulgar Khanate#214 448 221 444 223 448 227 446 225 444 229 442 229 438 235 441 255 437 265 443 280 443 280 453 297 453 287 445 284 435 280 434 275 424 233 420 225 405 227 398 201 396 194 403 195 418 199 421 189 425 189 445 168 448 169 443 168 449 178 451 179 448 214 448|Poland#213 499 200 498 199 495 194 498 185 496 181 489 174 490 165 482 164 485 156 486 149 482 131 486 121 495 121 501 128 504 146 508 141 524 242 543 241 513 220 495 213 499|Celtic kingdoms#-28 516 -35 515 -52 519 -41 524 -41 527 -46 528 -45 530 -29 533 -28 516;-74 551 -61 552 -58 547 -57 542 -64 539 -60 529 -64 522 -98 514 -98 518 -103 520 -100 521 -105 522 -92 526 -96 526 -95 529 -89 532 -102 534 -97 539 -102 539 -102 541 -86 542 -82 546 -88 546 -83 551 -74 551|England#-2 535 3 531 0 528 16 527 15 520 3 515 14 514 13 511 2 507 -30 507 -35 506 -37 502 -45 504 -53 500 -58 501 -43 512 -29 514 -31 535 -29 542 -19 543 -19 556 -14 547 -3 540 -2 535|Scotland#-29 542 -36 544 -32 548 -41 548 -49 569 -48 578 -19 574 -27 565 -32 563 -27 562 -39 560 -27 560 -19 556 -19 543 -29 542|Sweden#119 575 120 580 168 580 165 579 167 574 161 564 154 568 134 565 127 574 123 577 119 575|Denmark#82 568 106 577 103 570 88 570 85 566 82 568;86 549 86 554 80 555 83 558 82 564 93 565 94 569 98 569 109 564 95 554 94 550 101 543 86 542 90 544 86 549;119 573 123 577 129 570 132 571 134 565 154 568 161 564 158 560 147 561 141 553 128 554 130 557 124 562 129 565 119 573|Holy Roman Empire#85 538 91 538 88 541 91 543 101 543 106 530 118 528 117 524 141 524 146 508 128 504 121 501 121 495 131 486 149 482 156 486 164 485 166 473 161 456 155 457 154 454 149 455 148 459 139 450 140 455 131 460 121 458 120 454 125 449 123 446 127 439 120 420 107 429 99 441 89 444 83 442 83 446 77 447 75 454 85 461 84 475 73 475 68 480 63 480 60 489 56 492 59 492 54 497 38 500 34 510 38 514 35 516 47 528 52 526 49 523 55 522 58 525 53 528 54 531 68 534 72 532 70 535 73 536 80 536 82 533 85 538|Navarre#-5 428 -10 419 -26 414 -27 424 -32 424 -34 434 -28 435 -5 428|León#-89 414 -86 424 -92 432 -83 434 -80 437 -58 437 -51 435 -44 409 -78 405 -78 409 -87 410 -89 414|Castilla#-34 434 -32 424 -27 424 -26 414 -44 409 -51 435 -34 434|Kingdom of France#-5 428 -19 433 -11 446 -12 455 -7 450 -12 457 -13 463 -26 473 -18 482 -20 487 -26 486 -31 489 -48 486 -31 489 -26 486 -16 486 -19 497 -13 497 -12 493 0 493 3 495 2 497 16 502 16 508 37 513 34 510 38 500 54 497 59 492 56 492 60 489 63 480 58 477 57 465 53 463 55 461 54 459 59 453 69 449 69 439 74 438 58 430 38 435 31 429 31 419 14 412 9 419 13 426 -5 428|Aragón#-10 419 -5 428 13 425 9 419 -10 419|Almoravid dynasty#-120 260 -120 281 -103 291 -97 300 -99 311 -92 326 -70 339 -59 357 -56 359 -46 352 -30 354 -20 351 -11 356 -1 357 8 364 16 365 12 359 9 331 -32 260;-30 367 -44 367 -57 360 -69 371 -90 370 -88 384 -92 384 -90 389 -95 388 -87 410 -78 409 -78 405 -35 410 -10 419 10 419 14 412 9 410 -4 394 2 387 -7 382 -8 376 -16 374 -22 367 -30 367|Britany#-20 487 -18 482 -26 473 -26 476 -44 478 -47 481 -43 481 -46 483 -44 484 -48 484 -34 488 -20 487|Prussians#200 544 234 541 136 523 117 524 118 528 106 530 101 543 110 543 107 540 112 539 129 543 145 535 145 539 177 547 188 545 183 546 187 543 198 545 192 542 200 544|Principality of Polotsk#273 565 290 559 297 543 287 535 271 536 266 545 269 552 265 563 273 565|Alans#308 466 296 458 297 453 280 453 280 443 265 443 255 437 235 441 229 438 229 442 225 444 231 450 265 458 274 463 276 469 274 475 290 484 311 466 308 466|Kievan Rus#400 580 400 550 385 545 378 540 378 532 371 532 367 519 334 490 352 485 352 476 330 470 331 466 325 461 319 464 322 466 320 469 311 466 290 484 274 475 256 482 216 491 241 513 242 543 267 547 271 536 287 535 297 543 290 559 278 563 276 580 281 580|Kievan Rus#389 442 375 447 370 452 377 453 380 460 383 460 398 454 391 441 389 442|Karakalpaks#400 536 379 540 385 545 400 550|Seljuk Empire#400 344 370 357 376 372 400 380|Byzantine Empire#275 424 281 416 291 412 288 409 275 410 261 400 266 405 250 410 236 408 243 402 236 403 239 400 233 403 236 400 233 400 229 407 225 405 233 420 275 424;247 349 235 353 237 357 257 351 263 353 262 350 247 349;227 398 232 392 229 394 229 390 225 389 238 383 240 378 235 381 229 379 234 375 226 376 230 366 224 365 220 370 216 370 212 379 219 383 227 380 231 382 212 383 208 389 212 390 201 396 227 398;154 419 162 418 160 414 180 406 185 401 184 397 178 402 169 405 165 397 171 394 172 390 166 388 161 379 156 380 158 386 162 388 157 401 154 419|Cuman-Kipchak confederation#400 436 391 441 398 454 378 466 393 471 392 473 338 462 351 453 358 454 358 451 335 447 334 453 325 454 336 459 325 461 331 466 330 470 352 476 352 485 334 490 367 519 371 532 378 532 379 540 400 536|Papal States#127 439 136 435 141 426 134 424 136 418 139 418 138 412 120 420 127 439|Serbia#168 448 189 445 189 425 199 421 195 418 166 434 168 448", "1492": "Cyprus#338 352 339 350 329 345 323 347 321 350 345 356 338 352|Denmark-Norway#86 549 86 554 80 555 82 560 102 560 94 550 101 543 86 542 90 544 86 549;146 560 143 559 141 553 133 553 128 554 130 557 126 560|England#-63 539 -60 529 -64 522 -98 514 -98 518 -103 520 -100 521 -105 521 -92 526 -96 526 -95 529 -89 532 -102 534 -97 539 -102 539 -102 541 -86 542 -82 546 -88 546 -83 551 -61 552 -57 543 -63 539;-20 556 -14 547 -3 540 -3 536 3 531 0 528 16 527 15 520 3 515 14 514 13 511 2 507 -30 507 -35 506 -37 502 -45 504 -53 500 -58 501 -43 512 -29 514 -28 516 -35 515 -52 519 -41 524 -41 527 -46 528 -45 530 -29 533 -29 542 -36 544 -33 549 -20 556|Scotland#-33 549 -51 548 -46 554 -49 557 -47 560 -56 559 -22 558 -20 556 -33 549|Portugal#-75 372 -90 370 -88 384 -92 384 -90 389 -95 388 -87 410 -89 418 -82 421 -67 420 -61 414 -68 411 -69 397 -74 395 -69 390 -74 383 -68 381 -75 372|Papal States#124 447 123 443 136 435 141 426 134 424 136 418 139 418 138 412 120 420 122 439 119 444 112 441 112 451 120 451 124 447|France#20 502 54 497 59 492 56 492 60 489 63 480 58 477 57 465 53 463 55 461 54 459 59 453 69 449 68 442 69 438 74 439 73 437 58 430 38 435 30 428 17 425 -6 427 -19 433 -11 446 -12 455 -7 450 -12 457 -13 463 -26 473 -18 482 -20 487 -15 487 -19 497 -13 497 -12 493 0 493 3 495 2 497 16 502 18 509 20 502|Venice#136 461 134 457 123 454 124 447 120 451 116 449 100 454 98 457 95 455 95 463 100 463 104 469 105 457 108 456 116 460 119 464 117 468 121 469 135 470 136 461|Ryazan#420 522 404 514 377 527 369 521 366 543 373 542 375 551 384 551 394 558 408 555 406 548 420 548|Georgia#420 414 415 414 417 421 411 430 413 436 420 436|Teutonic Knights#275 560 274 557 261 560 212 560 213 555 220 553 222 541 186 531 183 534 187 543 198 545 193 542 203 546 198 545 199 548 211 548 210 560|Grand Duchy of Moscow#420 560 420 548 406 548 408 555 394 558 384 551 375 551 373 542 362 543 362 548 345 547 341 551 344 560 306 560|Poland-Lithuania#376 514 383 512 381 490 377 489 375 484 320 469 309 475 284 453 265 453 267 458 259 469 257 487 213 499 200 498 199 495 194 498 189 496 186 506 176 517 169 517 165 522 158 523 158 526 164 535 162 537 167 539 168 535 167 540 177 544 177 547 188 545 183 546 187 543 183 534 186 531 222 541 220 553 213 555 212 560 261 560 274 557 275 560 344 560 341 551 345 547 362 548 362 543 366 543 369 521 376 514|Imperial Hungary#144 453 148 459 149 455 154 454 155 457 161 456 165 464 163 464 166 477 174 478 174 490 181 489 185 496 194 498 199 495 200 498 213 499 257 487 259 469 267 455 265 453 235 459 208 449 198 449 189 444 169 442 167 438 154 439 151 442 155 442 144 453|Navarre#-21 433 -9 429 -17 421 -16 418 -23 418 -22 422 -27 424 -26 431 -21 433|Castille#-88 419 -86 424 -93 430 -80 437 -21 433 -26 431 -27 424 -21 421 -23 421 -23 413 -20 412 -19 406 -23 402 -18 399 -20 386 -17 382 -20 378 -19 370 -44 367 -57 360 -62 363 -66 370 -75 372 -68 381 -74 383 -69 390 -74 395 -69 397 -68 411 -61 415 -69 420 -88 419|Wattasid Caliphate#-22 351 -17 342 -18 324 -49 324 -83 333 -70 339 -59 357 -56 359 -46 352 -30 354 -22 351|Zayyanid Caliphate#65 327 -18 324 -17 342 -22 351 -11 356 -1 357 11 365 37 368 54 367 63 371 69 368 65 327|Hafsid Caliphate#86 369 94 373 100 372 104 367 110 371 105 361 111 352 100 341 121 329 124 325 125 308 79 326 65 327 69 368 73 371 79 368 86 369|Mamluke Sultanate#348 292 342 278 333 286 326 299 323 295 343 260 282 260 274 272 254 280 217 281 170 288 125 308 124 325 121 329 150 324 158 313 174 310 189 302 200 307 201 320 217 328 229 326 232 321 248 319 253 314 261 315 290 308 310 315 317 314 321 310 337 310 345 316 359 344 356 354 359 358 357 361 361 365 359 368 368 370 365 374 386 384 392 382 390 376 380 371 384 366 381 360 389 360 372 336 365 312 366 298 374 280 387 260 367 260 354 277 348 281 351 293 348 292|Emirate of the White Sheep Turks#420 324 400 344 380 346 389 360 381 360 384 366 380 371 390 376 392 382 386 384 412 402 415 414 420 414|Golden Horde#420 436 413 436 420 455 420 505 400 491 381 490 383 512 369 521 377 527 404 514 420 522|Holy Roman Empire#95 426 90 414 85 424 92 427 93 430 95 426;86 538 91 538 88 541 91 543 110 543 107 540 112 539 129 543 145 535 145 539 177 547 177 544 167 540 168 535 167 539 162 537 164 535 158 523 165 522 169 517 176 517 186 506 189 496 185 496 181 489 174 490 174 478 166 477 163 464 165 464 161 456 155 457 154 454 149 455 148 459 141 453 141 457 134 457 137 466 133 471 117 468 119 464 116 460 108 456 105 457 104 469 100 463 95 463 95 455 98 457 100 454 108 454 113 449 112 441 121 442 123 433 120 420 107 429 97 442 87 444 74 438 69 438 69 449 59 453 54 459 55 461 53 463 57 465 58 477 63 480 60 489 56 492 59 492 54 497 18 502 18 509 37 513 35 516 47 528 52 526 49 523 55 522 58 525 53 528 54 531 68 534 72 532 70 535 73 536 80 536 82 533 86 538|Swiss Confederation#75 475 85 478 97 474 95 468 88 466 90 463 87 465 74 459 70 466 72 471 65 470 75 475|Crimean Khanate#320 468 361 479 375 484 377 489 400 491 420 505 420 455 411 430 375 447 370 452 377 453 380 460 385 461 378 466 393 471 392 473 338 462 351 453 365 454 340 445 334 446 334 453 325 454 336 459 335 461 322 462 320 468|Britany#-20 487 -18 482 -26 473 -26 476 -44 478 -47 481 -43 481 -46 483 -44 484 -48 484 -34 488 -20 487|Aragón#86 391 82 408 93 412 98 406 96 395 95 391 86 391;144 424 149 420 162 418 159 415 180 406 185 401 184 397 178 402 169 405 165 397 171 394 172 390 166 388 161 379 157 379 158 386 162 388 158 399 149 402 147 407 141 408 138 412 139 418 134 422 141 426 144 424;142 370 126 376 125 379 133 382 138 380 154 382 150 367 142 370;-17 421 -8 429 17 425 29 429 32 421 21 413 9 410 -4 394 2 387 -7 382 -8 376 -16 374 -19 370 -20 378 -17 382 -20 386 -18 399 -23 402 -19 406 -23 415 -21 418 -16 418 -17 421|Ottoman Empire#352 364 345 366 338 361 332 360 309 368 306 368 304 361 295 361 290 367 280 365 280 369 273 369 275 371 272 374 271 379 264 381 265 384 270 384 267 386 270 388 266 393 270 395 261 395 261 399 271 404 291 403 289 406 299 407 293 407 290 410 292 412 312 411 332 419 350 420 364 412 383 409 404 410 415 414 412 402 391 386 365 374 368 370 352 364;173 431 171 435 166 434 169 442 189 444 198 449 208 449 235 459 265 453 284 453 309 475 320 469 308 466 296 458 296 451 287 445 284 435 280 434 275 425 281 416 291 412 290 410 275 410 261 400 266 405 250 410 236 408 243 402 236 403 239 400 233 403 236 400 233 400 229 407 225 405 225 401 232 392 229 394 229 390 225 389 240 382 239 377 234 381 229 379 234 375 226 376 230 366 224 365 220 370 218 368 212 378 219 383 227 380 231 382 212 383 208 389 212 390 202 394 194 403 196 418 173 431", "1900": "United Kingdom of Great Britain and Ireland#-63 538 -60 529 -64 522 -98 514 -98 518 -103 520 -100 521 -105 521 -92 526 -96 526 -95 529 -89 532 -102 534 -97 539 -102 539 -102 541 -86 542 -82 546 -88 546 -83 551 -73 554 -61 552 -57 543 -63 538;3 531 0 528 14 528 17 523 3 515 14 514 9 509 -30 507 -35 506 -37 502 -58 501 -43 512 -31 512 -28 516 -35 515 -52 519 -41 524 -41 527 -46 528 -45 530 -29 533 -29 540 -36 544 -32 548 -51 548 -46 554 -49 557 -47 561 -56 558 -53 565 -60 565 -55 574 -58 576 -51 578 -53 581 -49 582 -51 584 -32 585 -42 576 -19 574 -27 565 -32 563 -27 562 -39 560 -27 560 -17 555 -14 547 -3 540 -3 536 3 531|Belgium#25 511 48 515 58 511 57 507 62 507 63 503 57 499 58 495 55 495 49 498 49 501 43 499 42 502 28 507 25 511|Spain#-88 419 -86 424 -93 430 -80 437 -28 435 -6 427 29 424 32 421 21 413 9 410 -2 399 -4 394 2 387 -7 382 -8 376 -16 374 -22 367 -44 367 -57 360 -62 363 -66 370 -75 372 -68 381 -74 383 -69 390 -74 395 -69 397 -68 411 -61 415 -69 420 -88 419|Portugal#-75 372 -90 370 -88 384 -92 384 -90 389 -95 388 -87 410 -89 418 -82 421 -67 420 -61 414 -68 411 -69 397 -74 395 -69 390 -74 383 -68 381 -75 372|Netherlands#72 532 67 525 71 522 60 518 62 514 60 507 57 507 58 511 55 513 35 516 47 528 52 526 49 523 58 523 57 527 53 528 54 531 68 534 72 532|Greenland#-423 620 -425 613 -430 613 -428 605 -435 605 -430 598 -441 602 -445 598 -447 603 -456 606 -455 609 -458 611 -476 606 -489 614 -491 620|Canada#-672 455 -676 457 -678 472 -690 475 -706 453 -713 453 -715 450 -748 450 -761 443 -775 441 -769 441 -771 439 -792 438 -799 433 -791 432 -791 429 -800 428 -800 449 -797 447 -800 451 -800 513 -793 508 -796 513 -793 516 -788 512 -785 523 -790 537 -788 540 -795 547 -772 556 -765 566 -768 577 -785 587 -772 597 -774 607 -782 607 -775 615 -780 620 -726 620 -717 613 -695 610 -694 607 -697 603 -694 591 -698 590 -699 587 -686 588 -680 582 -668 584 -665 588 -659 584 -653 593 -656 597 -647 602 -630 588 -630 584 -619 577 -622 574 -613 568 -623 568 -619 563 -605 557 -606 551 -597 552 -574 546 -600 538 -602 533 -576 541 -571 539 -571 535 -566 537 -558 532 -561 526 -557 522 -558 520 -570 515 -585 514 -597 505 -664 503 -673 494 -688 490 -710 467 -683 485 -650 492 -643 489 -643 486 -652 481 -665 481 -656 477 -647 478 -654 471 -648 471 -645 463 -627 457 -619 459 -610 453 -636 445 -643 446 -643 443 -655 435 -662 441 -658 446 -662 445 -645 454 -641 451 -634 454 -649 454 -643 458 -647 461 -647 457 -664 451 -673 452 -672 455;-610 467 -606 471 -603 469 -611 460 -602 463 -599 459 -612 458 -614 463 -610 467;-580 491 -581 496 -574 506 -564 514 -556 516 -567 497 -561 501 -556 500 -560 497 -551 493 -545 495 -535 493 -541 488 -531 485 -539 482 -536 477 -531 479 -531 476 -527 475 -531 467 -536 469 -536 472 -541 470 -539 476 -542 478 -554 469 -559 471 -548 477 -592 477 -593 480 -581 486 -587 487 -580 491|France#-16 435 -11 446 -12 455 -7 450 -12 457 -12 462 -26 476 -47 480 -43 481 -46 483 -44 484 -48 486 -31 489 -26 486 -15 487 -19 497 -13 497 -12 493 0 493 3 495 2 497 16 502 16 508 25 511 28 507 42 502 43 499 49 501 49 498 55 495 82 490 77 486 75 476 69 475 59 460 58 454 69 449 69 439 74 438 65 432 56 430 38 435 31 429 31 424 20 423 7 428 2 426 -15 430 -19 433 -16 435;94 428 95 420 90 414 85 424 92 427 93 430 94 428|Switzerland#95 473 101 469 104 470 104 466 100 466 100 463 92 465 89 459 84 465 78 459 70 459 69 464 66 465 59 462 69 475 87 478 95 475 95 473|Morocco#-22 351 -17 346 -17 333 -11 325 -12 320 -28 320 -38 316 -37 309 -86 286 -86 276 -131 275 -116 282 -99 296 -96 302 -98 313 -92 326 -70 339 -59 357 -56 359 -46 352 -30 354 -22 351|Arabia#450 250 408 250 398 254 376 274 366 298 365 312 372 336 380 346 393 346 400 344 441 303 450 300|Egypt#326 299 323 295 326 288 348 250 251 250 259 257 256 266 248 270 247 283 253 288 253 299 243 305 243 319 248 319 253 314 261 315 292 308 308 314 317 314 326 310 326 299|Tunisia#83 326 76 338 83 348 83 365 94 373 100 372 104 367 110 371 105 361 111 352 100 341 115 331 115 323 105 318 105 308 93 301 89 321 83 326|Algeria#83 326 48 333 14 309 -12 320 -11 325 -17 333 -17 346 -22 351 -11 356 -1 357 11 365 37 368 54 367 63 371 69 368 73 371 79 368 86 369 83 363 83 348 76 340 77 332 83 326|Persia#450 367 442 379 445 383 441 393 447 398 437 401 438 407 429 415 440 426 450 428|Romania#270 487 276 488 277 484 289 478 294 468 304 462 296 458 297 453 287 445 285 437 267 443 254 438 229 439 230 441 224 445 227 446 223 450 225 457 241 461 255 458 254 463 262 468 263 472 252 477 261 479 264 481 261 486 270 487|Serbia#203 433 197 434 192 440 196 440 191 443 194 449 227 446 224 445 227 443 223 438 226 431 223 427 211 425 211 428 204 429 203 433|Montenegro#192 435 203 433 204 428 198 425 196 418 182 427 186 436 189 438 192 435|Bosnia-Herzegovina#176 429 162 442 158 448 158 452 194 449 191 444 196 440 192 440 195 436 186 436 182 427 185 424 176 429|United States of America#-742 405 -739 404 -742 398 -749 390 -755 397 -753 399 -756 397 -750 385 -759 372 -756 380 -764 387 -759 396 -766 393 -764 385 -767 385 -763 381 -773 385 -771 387 -773 385 -762 379 -764 377 -769 381 -763 376 -764 373 -768 376 -763 371 -769 373 -765 369 -760 369 -755 359 -760 368 -758 361 -762 364 -766 361 -767 364 -767 360 -761 360 -760 357 -757 359 -761 354 -771 356 -765 353 -768 350 -771 352 -770 350 -763 350 -773 347 -780 339 -789 337 -800 326 -800 422 -789 428 -791 432 -769 432 -762 436 -761 443 -748 450 -715 450 -713 453 -706 453 -690 475 -680 473 -677 470 -676 457 -672 456 -673 453 -669 449 -685 443 -688 446 -692 440 -702 438 -709 429 -706 427 -711 424 -703 418 -700 419 -701 421 -699 417 -712 415 -711 418 -714 418 -714 414 -729 413 -740 408 -739 412 -742 405|Italy#130 375 125 378 128 381 155 381 150 367 130 375;84 393 85 402 82 408 93 412 98 406 96 395 88 390 84 393;136 457 123 454 125 449 123 443 136 435 147 420 162 418 160 414 180 406 185 401 184 397 178 402 169 405 165 397 171 394 172 390 166 388 161 379 156 380 158 386 162 388 157 401 149 402 147 407 143 406 144 409 141 408 138 412 126 415 111 425 97 442 87 444 74 438 69 438 69 449 58 454 59 462 65 464 68 464 70 459 78 459 84 465 89 459 92 465 100 463 104 469 105 457 108 456 116 460 119 464 117 468 121 469 136 465 133 463 136 457|Austria Hungary#225 504 244 506 257 498 263 498 265 486 261 486 264 481 252 477 263 472 262 468 254 463 255 458 241 461 225 457 224 448 221 445 216 448 197 447 186 451 158 452 158 448 162 442 175 429 154 439 151 442 155 442 150 445 146 453 139 448 133 463 136 465 121 469 117 468 119 464 116 460 108 456 105 457 104 470 101 469 95 473 97 476 101 473 104 476 112 474 124 477 130 475 127 481 139 487 125 496 122 502 143 510 164 507 162 505 166 502 170 505 185 500 193 503 203 501 219 508 225 504|Bulgaria#275 424 242 423 224 427 226 431 223 438 227 443 229 439 254 438 269 442 285 437 275 424|Ottoman Empire#247 350 235 353 237 357 257 351 263 353 262 350 247 350;243 402 238 404 239 400 233 403 236 400 233 400 229 407 220 406 220 403 214 403 203 393 194 403 197 422 204 429 211 428 211 425 224 427 242 423 276 424 281 416 291 412 290 410 275 410 261 400 266 405 260 409 244 410 236 408 243 402;335 348 328 345 321 350 345 356 335 348;373 250 354 277 348 281 351 294 348 292 343 278 341 278 326 299 326 310 337 310 345 316 359 344 357 361 361 366 352 364 345 366 338 361 329 360 309 368 306 368 304 361 295 361 290 367 280 365 280 369 273 369 275 371 272 374 271 379 264 381 265 384 270 384 267 386 270 388 266 393 270 395 261 395 262 400 268 404 291 403 289 406 299 407 293 407 290 410 292 412 312 411 327 418 350 420 364 412 383 409 404 410 415 414 429 415 438 407 437 401 447 398 441 392 445 383 442 379 450 367 450 300 441 303 400 344 393 346 380 346 372 336 365 312 366 298 376 274 398 254 408 250;121 329 150 324 158 313 174 310 189 302 200 307 200 318 205 324 217 328 229 326 232 321 243 319 243 305 253 299 253 288 247 283 248 270 216 286 210 285 202 276 191 250 102 250 100 255 114 277 114 286 93 301 105 308 105 318 115 323 115 331 121 329|Greece#212 399 214 403 220 403 223 407 232 392 229 394 229 390 225 389 240 382 239 377 234 381 229 379 234 375 226 376 230 366 224 365 220 370 216 370 212 378 214 382 227 380 231 382 212 383 208 389 212 390 203 393 212 399|Sweden–Norway#108 591 106 596 102 590 80 581 70 580 56 585 55 590 63 590 58 591 62 593 59 593 61 595 55 593 51 595 62 598 57 598 59 602 51 603 56 605 50 607 54 610 50 613 51 617 58 618 54 620 175 620 171 615 172 607 179 606 190 599 180 594 165 596 176 592 186 593 164 586 168 580 165 579 167 574 164 568 158 560 143 559 141 553 128 554 130 557 124 562 129 565 119 573 116 578 118 582 112 583 112 591 108 591|Denmark#106 551 96 555 94 550 101 543 86 542 90 544 86 554 80 555 83 558 82 564 93 565 94 569 102 568 103 565 109 564 97 556 106 556 108 553 106 551;84 570 106 577 103 570 88 570 85 566 82 568 84 570|Germany#185 500 170 505 166 502 162 505 164 507 143 510 122 502 125 496 139 487 127 481 129 475 124 477 112 474 104 476 101 473 90 478 76 476 75 482 82 490 64 494 59 517 71 522 67 525 72 530 70 535 85 534 85 538 91 538 88 541 91 543 110 543 107 540 112 539 129 543 145 535 145 539 177 547 188 545 183 546 187 543 198 545 193 542 203 546 198 545 199 548 211 548 209 561 217 554 228 549 228 538 200 530 190 531 186 525 181 524 181 510 188 502 185 500|Russian Empire#241 506 225 504 219 508 203 501 188 502 181 510 179 522 186 525 190 531 200 530 228 538 228 549 217 554 209 561 209 565 217 575 224 576 234 569 243 570 245 582 237 582 234 591 254 595 277 593 279 596 291 599 301 598 297 601 286 602 285 606 269 603 266 606 258 601 232 598 230 602 224 601 216 605 213 620 450 620 450 428 440 426 429 415 415 414 417 418 414 428 379 447 375 447 370 452 377 453 380 460 385 461 378 466 393 471 392 473 338 462 351 453 365 454 363 451 337 445 334 446 334 453 325 454 336 459 335 461 322 462 320 469 304 462 301 463 289 478 277 484 276 488 265 486 263 498 257 498 252 503 241 506", "1938": "Switzerland#96 474 95 471 104 470 104 466 100 466 100 463 92 465 89 459 84 465 78 459 70 459 69 464 66 465 59 462 69 475 87 478 96 474|Spain#-88 422 -86 424 -93 430 -80 437 -28 435 -6 427 29 424 32 421 21 413 9 410 -2 399 -4 394 2 387 -7 382 -8 376 -16 374 -22 367 -44 367 -57 360 -62 363 -66 370 -75 372 -68 381 -74 383 -69 390 -74 395 -69 397 -68 411 -61 415 -69 420 -88 419 -88 422|United Kingdom#-2 535 3 531 0 528 16 527 15 520 3 515 14 514 13 511 2 507 -30 507 -35 506 -37 502 -45 504 -53 500 -58 501 -43 512 -31 512 -28 516 -35 515 -52 519 -41 524 -41 527 -46 528 -45 530 -29 533 -29 540 -36 544 -32 548 -51 548 -46 554 -49 557 -47 561 -56 558 -53 565 -60 565 -55 574 -58 576 -51 578 -53 581 -49 582 -51 584 -32 585 -42 576 -19 574 -27 565 -32 563 -27 562 -39 560 -22 558 -17 555 -14 547 -3 540 -2 535;-62 540 -71 544 -75 541 -81 545 -74 551 -61 552 -57 543 -62 540|Estonia#280 595 274 588 278 579 273 575 253 581 243 579 245 582 237 582 237 587 234 588 234 591 248 594 280 595|Latvia#273 575 278 573 276 568 282 563 276 558 264 557 249 564 221 564 209 561 210 566 217 575 226 576 238 569 243 572 243 579 251 581 273 575|Lithuania#258 549 249 550 248 540 236 539 233 543 227 544 228 548 225 551 212 552 209 561 221 564 249 564 266 557 266 551 258 549|Ireland#-62 540 -64 539 -60 529 -64 522 -98 514 -98 518 -103 520 -100 521 -105 521 -92 526 -96 526 -95 529 -89 532 -102 534 -97 539 -102 539 -102 541 -86 542 -82 546 -88 546 -83 551 -74 551 -81 545 -79 542 -71 544 -62 540|Belgium#25 511 48 515 58 511 57 507 62 507 63 503 57 499 58 495 55 495 49 498 49 501 43 499 42 502 28 507 25 511|France#70 459 67 458 71 454 65 451 69 449 69 443 76 441 65 432 56 430 38 435 31 429 31 424 26 423 7 428 -6 427 -19 433 -11 446 -12 455 -7 450 -12 457 -12 462 -26 476 -47 480 -43 481 -46 483 -44 484 -48 486 -31 489 -26 486 -15 487 -19 497 -13 497 -12 493 0 493 3 495 2 497 16 502 16 508 25 511 28 507 42 502 43 499 49 501 49 498 55 495 82 490 75 482 76 476 70 475 61 466 60 461 68 464 70 459;86 417 85 424 94 430 92 413 86 417|Albania#200 398 194 403 196 416 193 422 196 425 201 425 206 419 206 413 210 407 201 396 200 398|Portugal#-75 372 -90 370 -88 384 -92 384 -90 389 -95 388 -87 410 -89 418 -82 421 -67 420 -61 414 -68 411 -69 397 -74 395 -69 390 -74 383 -68 381 -75 372|Turkey#359 368 352 364 345 366 333 360 309 368 306 368 304 361 295 361 290 367 280 365 280 369 273 369 275 371 272 374 284 380 284 389 274 397 261 395 261 399 271 404 291 403 289 406 299 407 293 407 290 410 292 412 312 411 332 419 350 420 364 412 389 410 394 391 369 387 361 366 359 368;281 416 290 413 290 410 275 410 261 400 266 405 260 407 266 414 263 416 266 418 279 420 281 416|Tunisia#83 360 86 369 97 373 104 367 110 371 106 360|Algeria (France)#2 360 11 365 37 368 54 367 63 371 69 368 73 371 79 368 86 369 83 360|Netherlands#72 532 67 525 71 522 60 518 62 514 60 507 57 507 58 511 55 513 35 516 47 528 52 526 49 523 58 523 57 527 53 528 54 531 68 534 72 532|Norway#112 591 108 591 106 596 102 590 80 581 70 580 56 585 55 590 61 588 63 590 58 591 62 593 59 593 61 595 55 593 51 595 62 598 57 598 59 602 51 603 56 605 50 607 54 610 50 613 51 617 58 618 54 620 122 620 121 617 128 613 122 610 125 604 124 600 116 596 116 589 112 591|Bulgaria#223 427 229 431 223 438 227 443 229 439 254 438 266 442 280 434 275 425 279 420 269 420 255 412 244 415 229 412 223 427|Romania#243 485 255 489 255 492 259 489 261 491 271 486 276 488 277 484 289 478 294 468 304 462 296 458 297 453 287 445 283 434 274 436 266 442 254 438 229 439 230 441 224 445 227 446 214 448 215 452 203 461 213 465 223 477 231 481 242 479 243 485|Czechoslovakia#151 507 163 505 163 498 180 496 183 500 186 495 195 496 200 492 216 495 236 486 240 480 233 480 223 487 213 488 172 481 169 487 161 490 143 489 130 497 130 500 151 507|Hungary#213 488 223 487 233 480 221 476 208 462 181 458 167 464 163 469 167 475 164 476 170 477 175 482 213 488|Germany#225 551 228 548 227 544 198 545 199 548 211 548 214 553 225 551;144 504 130 500 130 497 143 489 161 490 169 487 173 480 164 476 167 475 160 466 145 464 124 467 121 471 101 469 95 471 97 476 90 478 75 476 77 486 82 490 64 494 59 517 71 522 67 525 72 530 70 535 80 536 82 533 85 538 91 538 89 542 86 542 90 544 86 549 95 549 100 546 99 544 110 543 109 539 129 543 145 535 145 539 183 547 177 537 163 531 164 523 175 521 181 514 186 504 180 496 163 498 163 505 151 507 144 504|Poland#275 547 267 543 266 531 271 530 275 508 269 503 270 487 255 492 255 489 243 485 242 479 236 486 216 495 200 492 195 496 186 495 183 500 186 504 181 514 175 521 163 525 163 531 177 537 183 547 188 545 183 546 187 543 198 545 192 542 200 544 230 544 235 539 244 539 248 540 249 550 266 551 266 557 271 558 277 555 275 547|Sweden#175 620 171 615 172 607 179 606 190 597 180 594 165 596 176 592 186 593 164 586 167 583 167 579 165 579 167 574 158 560 147 561 141 553 133 553 128 554 130 557 124 562 129 565 119 573 116 578 118 582 112 583 110 589 116 589 116 596 124 600 125 604 122 610 128 613 121 617 122 620|Finland#328 616 287 602 285 606 269 603 266 606 258 601 232 598 230 602 224 601 216 605 216 615 212 619 323 620 328 616|Denmark#90 571 106 577 103 570 88 570 85 566 82 568 84 570 90 571;86 554 80 555 83 558 82 564 93 565 94 569 98 569 109 564 97 556 106 556 107 551 102 551 97 555 95 549 87 549 86 554|Yugoslavia#155 442 145 453 141 464 163 469 178 458 203 461 215 452 214 448 227 446 224 445 227 443 223 438 229 431 223 427 223 423 228 419 229 412 210 407 201 425 196 425 194 418 191 419 170 433 161 434 154 440 155 442|Italy#84 392 85 402 82 408 93 412 98 406 96 395 88 390 84 392;139 372 125 376 127 381 155 382 150 367 139 372;134 456 123 454 125 449 123 443 136 435 147 420 162 418 160 414 180 406 185 401 184 397 178 402 169 405 165 397 171 394 172 390 166 388 161 379 156 380 158 386 162 388 157 401 149 402 147 407 143 406 144 409 141 408 138 412 126 415 111 425 99 441 87 444 76 439 76 442 69 443 69 449 65 451 71 454 67 458 78 459 84 465 89 459 92 465 100 463 104 469 121 471 124 467 141 464 145 453 139 448 135 455 138 456 134 456|USSR#420 620 420 414 415 414 417 421 411 430 375 447 370 452 377 453 380 460 385 461 378 466 393 471 392 473 338 462 351 453 365 454 363 451 337 445 334 446 334 453 325 454 336 459 335 461 322 462 320 469 304 462 301 463 289 478 277 484 276 488 270 487 269 503 275 508 271 530 266 531 267 543 275 547 276 559 282 563 276 568 278 573 273 576 278 579 274 588 281 593 279 596 301 598 297 601 287 602 328 616 323 620|Syria (France)#358 360 369 387 394 391 402 383 420 378 420 366 414 364 413 360|Greece#274 397 284 389 284 380 272 374 271 379 264 382 270 384 267 386 270 388 266 393 274 397;208 403 210 407 220 411 244 415 255 412 262 417 266 414 260 407 250 410 236 408 243 402 236 403 239 400 233 403 236 400 233 400 229 407 225 405 225 401 232 392 229 394 229 390 225 389 240 382 239 377 234 381 229 379 234 375 226 376 230 366 224 365 220 370 216 370 212 378 214 382 227 380 231 382 212 383 208 389 212 390 201 396 208 403|Armenia#420 378 402 383 393 391 389 410 404 410 420 414"};
+// ---------- places (lon, lat) ----------
+const PLACES={
+  ur:{p:[46.10,30.96],l:'Ur',a:'r'},
+  haran:{p:[39.03,36.87],l:'Haran',a:'t'},
+  canaan:{p:[35.28,32.21],l:'Canaan',a:'t'},
+  hebron:{p:[35.10,31.53],l:'Hebron',a:'b'},
+  jerusalem:{p:[35.23,31.78],l:'Jerusalem',a:'b'},
+  goshen:{p:[31.80,30.70],l:'Goshen',a:'l'},
+  sinai:{p:[33.97,28.54],l:'Mount Sinai',a:'b'},
+  jericho:{p:[35.44,31.86],l:'Jericho',a:'r'},
+  samaria:{p:[35.19,32.28],l:'Samaria',a:'l'},
+  nineveh:{p:[43.15,36.36],l:'Nineveh',a:'r'},
+  babylon:{p:[44.42,32.54],l:'Babylon',a:'r'},
+  rome:{p:[12.50,41.90],l:'Rome',a:'r'},
+  alexandria:{p:[29.92,31.20],l:'Alexandria',a:'t'},
+  kairouan:{p:[10.10,35.68],l:'Kairouan',a:'b'},
+  mainz:{p:[8.27,50.00],l:'Mainz',a:'r'},
+  troyes:{p:[4.07,48.30],l:'Troyes',a:'l'},
+  cordoba:{p:[-4.78,37.88],l:'Córdoba',a:'b'},
+  toledo:{p:[-4.02,39.86],l:'Toledo',a:'t'},
+  fez:{p:[-5.00,34.03],l:'Fez',a:'b'},
+  acre:{p:[35.07,32.92],l:'Acre',a:'l'},
+  cairo:{p:[31.24,30.04],l:'Cairo',a:'b'},
+  krakow:{p:[19.94,50.06],l:'Kraków',a:'b'},
+  vilna:{p:[25.28,54.69],l:'Vilna',a:'r'},
+  lisbon:{p:[-9.14,38.72],l:'Lisbon',a:'l'},
+  amsterdam:{p:[4.90,52.37],l:'Amsterdam',a:'r'},
+  salonika:{p:[22.94,40.64],l:'Salonika',a:'t'},
+  istanbul:{p:[28.98,41.01],l:'Istanbul',a:'r'},
+  safed:{p:[35.50,32.96],l:'Safed',a:'r'},
+  kishinev:{p:[28.86,47.01],l:'Kishinev',a:'l'},
+  kyiv:{p:[30.52,50.45],l:'Kyiv',a:'r'},
+  odessa:{p:[30.73,46.48],l:'Odessa',a:'b'},
+  warsaw:{p:[21.01,52.23],l:'Warsaw',a:'t'},
+  berlin:{p:[13.40,52.52],l:'Berlin',a:'b'},
+  hamburg:{p:[9.99,53.55],l:'Hamburg',a:'t'},
+  newyork:{p:[-74.00,40.71],l:'New York',a:'r'},
+  jaffa:{p:[34.75,32.05],l:'Jaffa',a:'l'},
+  israel:{p:[34.85,31.95],l:'Israel',a:'l'},
+  aden:{p:[45.03,12.79],l:'Yemen',a:'r'},
+  baghdad:{p:[44.36,33.31],l:'Iraq',a:'r'},
+  gondar:{p:[37.47,12.60],l:'Ethiopia',a:'r'},
+  moscow:{p:[37.62,55.76],l:{k:'Russia',o:'Soviet Union'},a:'r'},
+  casablanca:{p:[-7.59,33.57],l:'Morocco',a:'l'},
+  europe:{p:[11.00,49.50],l:'Europe',a:'t'},
+  america:{p:[-74.00,40.71],l:'America',a:'r'},
+  tiberias:{p:[35.53,32.79],l:'Tiberias',a:'r'},
+  germanyC:{p:[9.2,50.2],l:'Germany',a:'l'},parisC:{p:[2.35,48.86],l:'France',a:'l'},montreal:{p:[-73.57,45.5],l:'Canada',a:'r'},
+  viennaL:{p:[16.37,48.21],l:'Vienna',a:'b'},london:{p:[-0.13,51.5],l:'London',a:'l'},
+  paris:{p:[2.35,48.86]},prague:{p:[14.42,50.09]},vienna:{p:[16.37,48.21]},budapest:{p:[19.04,47.50]}
+};
+
+// global labels: [text, lon, lat, class, minViewWidth, maxViewWidth]
+const GLOBAL_LABELS=[
+  ['EUROPE',12,47.2,'glabel',45,999],['AFRICA',17,20,'glabel',45,999],['ASIA',52,46,'glabel',45,999],
+  ['NORTH AMERICA',-70,50,'glabel',45,999],['ATLANTIC OCEAN',-38,37,'slabel',30,999],
+  ['Mediterranean Sea',18,34.3,'slabel',14,120],['Red Sea',38.6,20.5,'slabel',0,80],['Black Sea',34,43.4,'slabel',0,90]
+];
+
+// ---------- scenes ----------
+// v: versions (k = K-2, o = grades 3+). Route: pts (place keys or [lon,lat]), mode walk|sea|air, home (green arrow), v, at (sentence index that starts it), delay (ms after that), dur (ms)
+const SCENES=[
+{id:'intro',v:'ko',art:'intro',he:'הַמַּסָּע שֶׁלָּנוּ',tr:'Our journey',view:[-77,6,60,60],
+ era:{k:'A very long journey',o:'Nearly 4,000 years'},title:{k:'A Journey Across the World',o:'A People on the Move'},
+ k:["Look at this map of the world!",
+    "The blue parts are water, and the yellow parts are land.",
+    "The Jewish people have taken a long, long journey across this map.",
+    "Let's follow it together, all the way from the very beginning!"],
+ o:["For nearly four thousand years, the Jewish people have been on the move.",
+    "Sometimes we chose to travel. Many times, we were forced to leave our homes.",
+    "But again and again, we carried our Torah, our traditions, and our hope of returning to the Land of Israel.",
+    "Let's trace that journey across the map."],
+ routes:[]},
+
+{id:'avraham',v:'ko',art:'tent',he:'לֶךְ־לְךָ',tr:'Lech Lecha: Go forth',view:[33,29.3,48,38.2],
+ era:{k:'Long, long ago',o:'About 3,800 years ago'},title:{k:'Avraham Goes on a Journey',o:'Lech Lecha'},
+ k:["Long, long ago, a man named Avraham lived in a city called Ur.",
+    "Hashem said to him: Lech Lecha! Go to a new land that I will show you.",
+    "So Avraham and Sarah packed up their tents and their animals.",
+    "They walked and walked, all the way to the land of Canaan.",
+    "Today, we call that land Israel."],
+ o:["Our story begins with Avraham, in the city of Ur, in Mesopotamia. Today, that is in Iraq.",
+    "Avraham's family moved north to Haran, in what is today Turkey.",
+    "There, Hashem told him: Lech Lecha. Leave your land and your father's house, and go to the land that I will show you.",
+    "Avraham and Sarah traveled south to Canaan, and Hashem promised that this land would belong to their children forever."],
+ routes:[{pts:['ur',[44.3,32.4],[42.1,34.3],[40.2,35.4],'haran',[37.3,36.0],[36.4,33.6],'canaan'],mode:'walk',home:1,dur:9000}]},
+
+{id:'egypt',v:'ko',art:'egypt',he:'מִצְרַיִם',tr:'Mitzrayim: Egypt',view:[29.4,28.6,37,33.2],
+ era:{k:'Many years later',o:'Generations later'},title:{k:'Down to Egypt',o:'Down to Egypt'},
+ k:["Avraham's grandson Yaakov had a big family, with twelve sons!",
+    "One year, no rain fell, and there was no food in the land.",
+    "So Yaakov's family went down to Egypt, where his son Yosef was waiting for them.",
+    "But later, a mean Pharaoh made the Jewish people work as slaves."],
+ o:["Avraham's grandson Yaakov, also called Yisrael, had twelve sons. Their families became the twelve tribes.",
+    "Yaakov's son Yosef was sold as a slave in Egypt, but he rose to become a leader there.",
+    "When a terrible famine struck Canaan, Yaakov's family of seventy people went down to Egypt to join him.",
+    "They settled in Goshen and grew into a great nation. But a new Pharaoh feared them, and he forced them into slavery."],
+ routes:[{pts:['hebron',[34.3,31.3],[33.0,31.05],'goshen'],mode:'walk',dur:6000,at:2}]},
+
+{id:'exodus',v:'ko',art:'sea',he:'יְצִיאַת מִצְרַיִם',tr:'Yetziat Mitzrayim: The Exodus',view:[30.5,27.7,37,32.6],
+ era:{k:'The Exodus',o:'The Exodus'},title:{k:'Out of Egypt',o:'Out of Egypt'},
+ k:["Hashem sent Moshe to tell Pharaoh: Let my people go!",
+    "The Jewish people left Egypt and crossed the sea on dry land.",
+    "At Mount Sinai, they received the Torah.",
+    "After forty years in the desert, they came home to the Land of Israel.",
+    "Every Pesach, at the seder, we remember this journey."],
+ o:["Hashem sent Moshe to lead the Israelites out of Egypt. After ten plagues, Pharaoh finally let them go.",
+    "They crossed the Sea of Reeds and came to Mount Sinai, where they received the Torah.",
+    "They wandered in the desert for forty years.",
+    "Then, led by Yehoshua, they crossed the Jordan River into the Land of Israel."],
+ routes:[{pts:['goshen',[32.55,30.2],[32.9,29.4],[33.3,28.9],'sinai',[34.3,29.6],[34.45,30.6],[35.3,30.4],[35.75,31.3],[35.7,31.75],'jericho'],mode:'walk',home:1,dur:12000}]},
+
+{id:'babylon',v:'ko',art:'river',he:'גָּלוּת בָּבֶל',tr:'Galut Bavel: Exile in Babylon',view:[33.2,29.8,47.5,38.2],
+ era:{k:'About 2,600 years ago',o:'722 and 586 BCE'},title:{k:'Far Away in Babylon',o:'Exile and Return'},
+ k:["In Jerusalem, King Shlomo built the Beit HaMikdash, the Holy Temple.",
+    "But one day, an army from Babylon came and destroyed it.",
+    "They took many Jews far away, to Babylon.",
+    "The Jews missed Jerusalem very much.",
+    "Many years later, King Cyrus let them go home, and they built the Temple again."],
+ o:["In the Land of Israel, King David made Jerusalem his capital, and King Shlomo built the First Temple.",
+    "Later, the kingdom split in two. In 722 BCE, the Assyrians conquered the northern kingdom and scattered the Ten Tribes.",
+    "In 586 BCE, the Babylonians destroyed Jerusalem and the Temple, and carried thousands of Jews into exile in Babylon.",
+    "By the rivers of Babylon, they wept, remembering Zion. About fifty years later, King Cyrus of Persia let them return, and they built the Second Temple.",
+    "Many Jews chose to stay in Babylon, which became a great center of Jewish learning for over a thousand years."],
+ routes:[
+  {v:'o',pts:['samaria',[36.5,34.6],[37.7,36.2],[40.6,36.7],'nineveh'],mode:'walk',at:1,dur:5000},
+  {pts:['jerusalem',[36.2,33.6],[37.4,35.9],[40.1,35.3],[42.2,34.3],'babylon'],mode:'walk',at:{k:1,o:2},dur:6000},
+  {pts:['babylon',[42.0,33.7],[39.8,34.6],[37.0,35.2],[36.0,33.2],'jerusalem'],mode:'walk',home:1,at:{k:4,o:3},dur:6000}]},
+
+{id:'rome',v:'ko',art:'menorah',he:'גָּלוּת',tr:'Galut: Exile',view:[-8,27,46,52],
+ era:{k:'About 2,000 years ago',o:'70 CE'},title:{k:'Spreading Around the World',o:'Rome and the Great Scattering'},
+ places:['babylon','tiberias'],
+ regions:[['SPAIN',-3.5,40.6],['FRANCE',2.4,46.8],['GERMANY',11,51.6],['NORTH AFRICA',4,31]],
+ k:["Then the Romans came and destroyed the Second Temple.",
+    "This time, the Jewish people spread out to many, many lands.",
+    "Some went to Italy, Spain, France, and Germany. Some lived in North Africa, and some in Babylon.",
+    "But some Jews always stayed in the Land of Israel, even when times were very hard.",
+    "Wherever they went, they brought the Torah, kept Shabbat, and prayed facing Jerusalem."],
+ o:["In the year 70, the Roman army destroyed Jerusalem and the Second Temple.",
+    "The Romans carried captives and treasures, including the Temple menorah, back to Rome. You can still see it carved on the Arch of Titus.",
+    "Over the next centuries, Jews spread across the Roman world and beyond: to Italy, North Africa, Spain, France, and Germany.",
+    "Still, Jews never completely left the Land of Israel. Communities in the Galilee, in towns like Tiberias, carried on, and rabbis there wrote down the Mishnah around the year 200.",
+    "In every century since, there have been Jews living in the Land of Israel, even when they were few. Wherever they lived, Jews kept Judaism alive through prayer, the synagogue, and study."],
+ routes:[
+  {pts:['jerusalem',[34.8,32.4],[32,33.7],[27.5,34.4],[24,34.5],[19.5,36.1],[15.2,36.3],[12.0,37.15],[11.6,38.8],[12.0,41.0],'rome'],mode:'sea',at:{k:0,o:1},dur:7000},
+  {pts:['jerusalem',[34.3,31.3],[32.3,31.0],'alexandria',[25,31.6],[19,31.6],[13.2,32.6],'kairouan'],mode:'walk',at:{k:1,o:2},dur:7000},
+  {pts:['rome',[11,44.5],[9,47.5],'mainz'],mode:'walk',at:{k:1,o:2},delay:800,dur:5000},
+  {pts:['rome',[11.0,40.3],[9.0,38.4],[4.5,38.4],[0.2,38.2],[-1.5,37.9],'cordoba'],mode:'sea',at:{k:1,o:2},delay:1600,dur:6000}]},
+
+{id:'sefarad',v:'o',art:'books',he:'סְפָרַד וְאַשְׁכְּנַז',tr:'Sepharad and Ashkenaz',view:[-9,28,37,56],
+ era:{o:'900s to 1500s'},title:{o:'Sepharad and Ashkenaz'},
+ regions:[['SEPHARAD',-4.2,41.2],['ASHKENAZ',8.5,52.6],['ENGLAND',-1.6,52.5]],
+ o:["Jews in Spain called it Sepharad. During a golden age, Jewish poets, doctors, and scholars flourished there.",
+    "The great Rambam was born in Córdoba in the 1130s. When his family was forced to flee, they went to Morocco, then to the Land of Israel, and finally to Egypt.",
+    "Jews in Germany and France were called Ashkenazim. Rashi, who wrote the most famous commentary on the Torah and the Talmud, lived in France.",
+    "But the Crusades brought terrible attacks, and Jews were expelled from England in 1290 and from France in 1306.",
+    "Many moved east to Poland and Lithuania, where Jewish life grew and thrived for hundreds of years."],
+ routes:[
+  {pts:['cordoba',[-5.6,36.2],[-5.6,35.4],'fez'],mode:'walk',at:1,dur:3500},
+  {pts:['fez',[-5.3,35.9],[-2,36.3],[3,37.3],[8,37.6],[11.8,37.4],[16,35.5],[22,34.6],[27.5,34.0],[32,33.5],'acre'],mode:'sea',at:1,delay:3500,dur:5000},
+  {pts:['acre',[34.6,31.6],[33.6,31.15],[32.3,30.9],'cairo'],mode:'walk',at:1,delay:8600,dur:2500},
+  {pts:['troyes','mainz',[14,51],'krakow',[22.5,52.5],'vilna'],mode:'walk',at:4,dur:7000}]},
+
+{id:'spain',v:'ko',art:'ship',he:'גֵּרוּשׁ סְפָרַד',tr:'Gerush Sefarad: Expulsion from Spain',view:[-10.5,35.6,4.5,44.2],zoomOut:{view:[-11,30,37,54],at:{k:3,o:2}},
+ era:{k:'1492',o:'1492'},title:{k:'Leaving Spain',o:'Expelled from Spain'},
+ regions:[['SPAIN',-3.3,38.3],['TURKEY',33,39.3,'k'],['OTTOMAN EMPIRE',33,39.3,'o']],
+ k:["For hundreds of years, many Jews lived in Spain. In Hebrew, Spain is called Sepharad.",
+    "But in 1492, the king and queen of Spain said: All Jews must leave!",
+    "Families had to leave their homes behind.",
+    "They traveled to new places, like Portugal, Morocco, Turkey, and the Land of Israel.",
+    "Jews whose families came from Spain are called Sephardi Jews. Maybe your family is Sephardi too!"],
+ o:["Over time, Christian rulers in Spain turned against the Jews. Many were forced to convert, and the Inquisition punished anyone suspected of secretly practicing Judaism.",
+    "In 1492, King Ferdinand and Queen Isabella ordered every Jew to leave Spain.",
+    "Tens of thousands left. Many fled to Portugal, where they were soon forced to convert. Others crossed to North Africa.",
+    "The Ottoman sultan welcomed Jewish refugees to cities like Istanbul and Salonika. Some settled in Safed, in the Land of Israel, which became a center of Torah and Kabbalah.",
+    "A century later, many Sephardic families found freedom in Amsterdam. Across the Ottoman lands, Sephardic Jews kept their Spanish-Jewish language, Ladino, alive for centuries.",
+    "Jews whose families came from Sepharad are called Sephardi Jews. They carried their prayers, songs, and foods to communities all over the world, where Sephardi Jews still live today."],
+ routes:[
+  {pts:['toledo',[-6.5,39.2],'lisbon'],mode:'walk',at:{k:3,o:2},dur:3000},
+  {pts:['toledo',[-4.8,37.9],[-5.6,36.3],[-5.8,35.6],'fez'],mode:'walk',at:{k:3,o:2},dur:4000,delay:600},
+  {pts:['toledo',[-1.0,39.3],[0.6,38.5],[4.5,38.4],[9.0,38.3],[11.8,37.4],[16.0,36.2],[21.5,35.8],[24.8,36.4],[26.0,38.2],[26.1,39.9],[26.5,40.25],[27.5,40.7],'istanbul'],mode:'sea',at:3,dur:8000,delay:300},
+  {pts:[[24.8,36.4],[24.6,38.8],[23.6,39.6],'salonika'],mode:'sea',at:3,dur:2500,delay:5600},
+  {pts:[[21.5,35.8],[26,34.9],[30.5,33.6],[34.6,33.0],'safed'],mode:'sea',home:1,at:3,dur:4500,delay:4700},
+  {v:'o',pts:['lisbon',[-10.3,40.0],[-9.8,43.8],[-5.8,48.6],[-2,50.0],[1.5,51.1],[3.5,52.0],'amsterdam'],mode:'sea',at:4,dur:6000}]},
+
+{id:'america',v:'ko',art:'liberty',he:'אֲמֶרִיקָה',tr:'America, the Golden Land',view:[-76,30,36,57],
+ era:{k:'More than 100 years ago',o:'1881 to 1924'},title:{k:'Big Ships to America',o:'Pogroms and the Golden Land'},
+ regions:[['POLAND',18.5,50.4]],
+ k:["Many Jews lived in little towns in Russia and Poland.",
+    "But it was not safe there. Angry mobs attacked Jewish homes. These attacks were called pogroms.",
+    "So many, many Jews got on big ships and sailed all the way across the ocean to America.",
+    "When they reached New York, they saw the Statue of Liberty.",
+    "Maybe your great-grandparents were on one of those ships!"],
+ o:["By the 1800s, most of the world's Jews lived in Eastern Europe, many in small towns called shtetls.",
+    "In the Russian Empire, Jews faced harsh laws, poverty, and violent attacks called pogroms, like the one in Kishinev in 1903.",
+    "Between 1881 and 1924, more than two million Jews left Eastern Europe. Most crossed the Atlantic to America, which they called the Golden Land.",
+    "They passed the Statue of Liberty and Ellis Island, and built new lives in places like New York's Lower East Side.",
+    "At the same time, a few brave pioneers sailed to the Land of Israel to build farms and towns. This was the First Aliyah, the start of the modern return to Zion."],
+ routes:[
+  {pts:['kyiv',[26,51.2],'warsaw','berlin','hamburg'],mode:'walk',at:2,dur:4500},
+  {pts:['kishinev',[26.5,49.5],'warsaw'],mode:'walk',at:2,dur:3000,delay:500},
+  {pts:['hamburg',[8.7,53.9],[6.5,53.9],[3.5,52.6],[1.8,51.2],[-1.0,50.3],[-5.8,49.4],[-20,47.5],[-45,44.5],[-65,41.2],[-73.4,40.3],'newyork'],mode:'sea',at:2,dur:9000,delay:4300},
+  {v:'o',pts:['odessa',[31.2,44.8],[29.3,41.7],'istanbul',[27.5,40.7],[26.5,40.25],[26.1,39.6],[26.3,37.6],[28.5,35.6],[32,34.0],'jaffa'],mode:'sea',home:1,at:4,dur:6000}]},
+
+{id:'shoah',v:'ko',art:'candle',he:'הַשּׁוֹאָה',tr:'HaShoah: The Holocaust',view:[-3,40,35,57],fx:'candles',
+ era:{k:'1933 to 1945',o:'1933 to 1945'},title:{k:'A Very Sad Time',o:'The Holocaust'},
+ k:["Then came the saddest time in Jewish history. It is called the Shoah, or the Holocaust.",
+    "The Nazis, who ruled Germany, hated the Jewish people, and they killed many, many Jews in Europe.",
+    "Some brave people hid Jewish children and helped keep them safe.",
+    "We light candles to remember, and we promise never to forget."],
+ o:["In 1933, the Nazis came to power in Germany. They spread hatred of Jews and took away their rights.",
+    "During World War Two, the Nazis and their helpers murdered six million Jews, including one and a half million children.",
+    "Jewish communities across Europe, some of them more than a thousand years old, were destroyed.",
+    "Some brave people, called the Righteous Among the Nations, risked their lives to save Jews.",
+    "Each year on Yom HaShoah, we light candles, and we promise to remember."],
+ candles:['amsterdam','paris','berlin','prague','vienna','budapest','krakow','warsaw','vilna','kyiv','salonika','mainz'],
+ routes:[]},
+
+{id:'israel',v:'ko',art:'plane',he:'קִבּוּץ גָּלֻיּוֹת',tr:'Kibbutz Galuyot: Gathering the exiles',view:[-77,8,60,58],
+ era:{k:'1948',o:'1948 and after'},title:{k:'Coming Home',o:'Return to the Land'},
+ k:["In 1948, the State of Israel was born!",
+    "Over the years, Jews came home from all over the world.",
+    "They flew on airplanes from Yemen, Iraq, and Ethiopia.",
+    "They came from Morocco, from Europe, from Russia, and from America.",
+    "After a very long journey, the Jewish people had a home in their own land again."],
+ o:["On May 14, 1948, David Ben-Gurion declared the independence of the State of Israel.",
+    "Holocaust survivors came from Europe. About 850,000 Jews left or were forced out of Arab countries, and most of them came to Israel.",
+    "In Operation On Wings of Eagles, about 49,000 Jews were flown from Yemen. About 120,000 came from Iraq.",
+    "In 1991, Operation Solomon flew more than 14,000 Ethiopian Jews to Israel in just 36 hours.",
+    "And in the 1990s, nearly a million Jews arrived from the former Soviet Union."],
+ routes:[
+  {pts:['europe','israel'],mode:'air',home:1,at:1,dur:3200},
+  {pts:['casablanca','israel'],mode:'air',home:1,at:1,dur:3500,delay:700},
+  {pts:['aden','israel'],mode:'air',home:1,at:1,dur:3000,delay:1400},
+  {pts:['baghdad','israel'],mode:'air',home:1,at:1,dur:2600,delay:2100},
+  {pts:['gondar','israel'],mode:'air',home:1,at:1,dur:3000,delay:2800},
+  {pts:['moscow','israel'],mode:'air',home:1,at:1,dur:3400,delay:3500},
+  {pts:['america','israel'],mode:'air',home:1,at:1,dur:5000,delay:4200}]},
+
+{id:'choice',v:'ko',art:'suitcase',he:'בְּחִירָה',tr:'Bechirah: Choice',view:[-77,27,38,57],
+ era:{k:'Then and now',o:'1800s to today'},title:{k:'Moving to New Places',o:'Moving by Choice'},
+ k:["Not every Jewish journey was sad.",
+    "Sometimes Jewish families moved because they wanted to!",
+    "Some moved to find good jobs, to go to school, or to live near family.",
+    "Some moved to a new country, and some chose to move to Israel.",
+    "Some of our journeys were not our choice, and some were. Every one of them is part of our story."],
+ o:["Not every Jewish journey was an escape. As trade and travel connected the world, more Jews could choose where to live.",
+    "In the 1800s, many Jews from Germany came to America looking for new opportunities, and others moved from small villages to growing cities like Berlin, Vienna, and London.",
+    "After 1948, many Jews from Morocco built new lives in France and Canada, as well as in Israel.",
+    "Today, Jews move for work, for school, for family, or simply because they love a place. Some Israelis move abroad, and some Jews from around the world choose to make aliyah.",
+    "Some of our moves were forced, and some were our choice. Together, they built the Jewish world we live in today."],
+ routes:[
+  {pts:['germanyC',[9.6,53.2],[8.7,53.9],[6.5,53.9],[3.5,52.6],[1.8,51.2],[-1.0,50.3],[-5.8,49.4],[-20,47.5],[-45,44.5],[-65,41.2],[-73.4,40.3],'newyork'],mode:'sea',choice:1,at:1,dur:7000},
+  {v:'o',pts:[[22.5,50.3],[19,51.6],[16,52.3],'berlin'],mode:'walk',choice:1,at:1,delay:1500,dur:3000},
+  {v:'o',pts:[[21.5,49.6],[19,48.8],'viennaL'],mode:'walk',choice:1,at:1,delay:2300,dur:2600},
+  {v:'o',pts:[[23.5,52.2],[16,53.6],[9,54.5],[4,52.8],[1.4,51.4],'london'],mode:'sea',choice:1,at:1,delay:3100,dur:4000},
+  {pts:['casablanca','parisC'],mode:'air',choice:1,at:2,dur:3000},
+  {pts:['casablanca','montreal'],mode:'air',choice:1,at:2,delay:900,dur:4200},
+  {pts:['israel','newyork'],mode:'air',choice:1,at:3,dur:4200},
+  {pts:['newyork','israel'],mode:'air',choice:1,home:1,bulge:-1,at:3,delay:1600,dur:4200}]},
+
+{id:'closing',v:'ko',art:'world',he:'כָּל יִשְׂרָאֵל עֲרֵבִים זֶה בָּזֶה',tr:'Kol Yisrael arevim zeh bazeh: All Jews are responsible for one another',view:[-80,4,62,60],fx:'communities',
+ era:{k:'Today',o:'Today'},title:{k:'Jewish Families Everywhere',o:'One People, Many Homes'},
+ k:["Look at all the places our people have traveled!",
+    "Today, Jewish families live all around the world: in America, Canada, England, France, Argentina, Australia, and many more places.",
+    "Some Jews live in Israel, and many live in other countries. Jewish life outside of Israel is called the Diaspora.",
+    "Wherever we live, we are one big family. We share the Torah, Shabbat, and our holidays, and when we pray, we face Jerusalem.",
+    "Where does your family's story begin? Ask your parents and grandparents to tell you!",
+    "Am Yisrael Chai! The Jewish people live!"],
+ o:["Today there are about sixteen million Jews in the world. Nearly half live in Israel, and the rest live in the Diaspora, in communities around the globe.",
+    "The largest Diaspora community is in the United States, and there are lively communities in France, Canada, Britain, Argentina, Russia, Germany, Australia, and many other places.",
+    "For many Jews, the Diaspora is not only a place of exile. It is home, where Jewish life, learning, and creativity have flourished for centuries.",
+    "Wherever we live, we are connected to one another and to the Land of Israel. We pray facing Jerusalem, and we share one story.",
+    "Where did your family's journey begin? Ask your parents and grandparents, and add your story to ours.",
+    "Am Yisrael Chai. The Jewish people live!"],
+ routes:[]}
+];
+
+// how the reading voice should say some words (display text stays the same)
+const SAY=[
+  [/Lech Lecha/g,'Lekh Lekha'],[/Hashem/g,'Hah-shem'],[/Yaakov/g,'Yah-ah-kove'],[/Yosef/g,'Yo-sef'],[/Moshe/g,'Mo-sheh'],
+  [/Beit HaMikdash/g,'Bait Hah-mik-dahsh'],[/Shlomo/g,'Shlo-mo'],[/Pesach/g,'Peh-sakh'],[/Yom HaShoah/g,'Yom Hah-show-ah'],[/Shoah/g,'Show-ah'],
+  [/Am Yisrael Chai/g,'Ahm Yis-rah-ale Khai'],[/Yisrael/g,'Yis-rah-ale'],[/Yehoshua/g,'Yeh-ho-shoo-ah'],[/Sepharad/g,'Seh-fah-rahd'],
+  [/Ashkenazim/g,'Ahsh-keh-nah-zeem'],[/Rambam/g,'Rahm-bahm'],[/Rashi/g,'Rah-shee'],[/Shabbat/g,'Shah-baht'],[/shtetls/g,'shtetles'],
+  [/Aliyah/g,'Ah-lee-yah'],[/(\d+) BCE/g,'$1 B.C.E.'],[/Córdoba/g,'Cordoba'],[/Kraków/g,'Krakow'],[/aliyah/g,'ah-lee-yah'],[/Sephardi/g,'Seh-far-dee'],[/Diaspora/g,'Dye-ass-pora']
+];
+
+// Recorded narration, one audio file per scene, keyed by version-sceneId (for example 'k-avraham': 'audio/k-avraham.m4a').
+// When a scene has a recording it plays instead of the computer voice, and the captions follow along.
+// Files named audio/<version>-<scene>.m4a next to this page are found automatically; list others here.
+const RECORDINGS={};
+
+// ---------- borders for each moment in the story ----------
+// Historical borders are simplified from the open "historical-basemaps" project (A. Ourednik); they are approximate.
+const SCENE_MAP={intro:'modern',avraham:'bc2000',egypt:'bc2000',exodus:'bc2000',babylon:'bc700',rome:'100',sefarad:'1100',spain:'1492',america:'1900',shoah:'1938',israel:'modern',choice:'modern',closing:'modern'};
+const MAP_YEAR={modern:'today',bc2000:'about 2000 BCE',bc700:'about 700 BCE','100':'about 100 CE','1100':'about 1100 CE','1492':'1492','1900':'about 1900','1938':'1938'};
+const ERA_LABELS={
+  bc2000:[['EGYPT',30.3,29.6],['HITTITES',33.8,39.4],['HURRIANS',43.6,37.6]],
+  bc700:[['ASSYRIA',41.6,37.4],['BABYLONIA',46.2,31.3],['EGYPT',31,29.6],['URARTU',43.5,39.4]],
+  '100':[['ROMAN EMPIRE',16,46.4],['PARTHIAN EMPIRE',47,36.6]],
+  '1100':[['HOLY ROMAN EMPIRE',11.2,48.6],['KINGDOM OF FRANCE',1.8,46],['BYZANTINE EMPIRE',31,39.2],['FATIMID CALIPHATE',26,29.5],['POLAND',18.5,52]],
+  '1492':[['PORTUGAL',-7.8,41.6],['FRANCE',2.2,46.6],['HOLY ROMAN EMPIRE',11.5,49.4],['POLAND-LITHUANIA',27,52.8],['MAMLUK SULTANATE',28.5,26.8]],
+  '1900':[['RUSSIAN EMPIRE',34,54.2],['GERMANY',11,50.6],['AUSTRIA-HUNGARY',17,47.3],['FRANCE',2.2,46.8],['OTTOMAN EMPIRE',32.5,39],['UNITED STATES',-78,42.8]],
+  '1938':[['GERMANY',10.4,50.6],['POLAND',19.6,52.8],['FRANCE',2,46.6],['SOVIET UNION',31,54],['ITALY',12.6,43.4],['HUNGARY',19.4,47.2]]
+};
+
+// Jewish communities today (core Jewish population, DellaPergola, American Jewish Year Book; rounded).
+// Dots are sized by community size; the label is the country.
+const COMMUNITIES=[
+  ['Israel',[34.9,31.9],7760000],['United States',[-74.0,40.7],6300000],['France',[2.35,48.86],438500],['Canada',[-79.4,43.7],398000],
+  ['United Kingdom',[-0.13,51.5],312000],['Russia',[37.6,55.75],132000],['Germany',[13.4,52.5],125000],['Hungary',[19.04,47.5],46000],
+  ['Ukraine',[30.5,50.45],30000],['Belgium',[4.4,51.2],29000],['Netherlands',[4.9,52.37],30000],['Italy',[12.5,41.9],27000]
+];
+// communities beyond the edge of this map
+const BEYOND=[['Argentina and Brazil ↓',-58,2],['South Africa ↓',24,1.5],['Australia →',57,6]];
+// ---------- illustrations (original, drawn with simple shapes; viewBox 240 x 160) ----------
+const SKIN=['#C98E5F','#E3B78E','#8D5A3B','#B47A50','#6B4429'];
+function fig(x,y,h,robe,o={}){
+  const hr=h*.14, hy=y-h+hr, bw=h*.34, sk=o.skin||SKIN[0];
+  let s='';
+  if(o.staff) s+=`<line x1="${x+bw*.75}" y1="${y}" x2="${x+bw*.75}" y2="${y-h*1.08}" stroke="#7A5230" stroke-width="${h*.05}" stroke-linecap="round"/>`;
+  s+=`<path d="M${x-bw*.55} ${y}L${x-bw*.32} ${hy+hr*1.25}Q${x} ${hy+hr*.55} ${x+bw*.32} ${hy+hr*1.25}L${x+bw*.55} ${y}Z" fill="${robe}"/>`;
+  s+=`<circle cx="${x}" cy="${hy}" r="${hr}" fill="${sk}"/>`;
+  if(o.hood) s+=`<path d="M${x-hr*1.2} ${hy+hr*.5}Q${x-hr*1.3} ${hy-hr*1.5} ${x} ${hy-hr*1.3}Q${x+hr*1.3} ${hy-hr*1.5} ${x+hr*1.2} ${hy+hr*.5}Q${x+hr*.9} ${hy-hr*.5} ${x} ${hy-hr*.6}Q${x-hr*.9} ${hy-hr*.5} ${x-hr*1.2} ${hy+hr*.5}Z" fill="${o.hood}"/>`;
+  if(o.kippah) s+=`<path d="M${x-hr*.7} ${hy-hr*.55}Q${x} ${hy-hr*1.35} ${x+hr*.7} ${hy-hr*.55}Z" fill="${o.kippah}"/>`;
+  if(o.bag) s+=`<rect x="${x+bw*.42}" y="${y-h*.36}" width="${h*.24}" height="${h*.2}" rx="${h*.03}" fill="${o.bag}" stroke="#3a2a1a" stroke-width="${h*.015}"/>`;
+  return s;
+}
+function stars(n,seed,w,h,col){let s='',r=seed;const rnd=()=>{r=(r*9301+49297)%233280;return r/233280};for(let i=0;i<n;i++)s+=`<circle cx="${(rnd()*w).toFixed(1)}" cy="${(rnd()*h).toFixed(1)}" r="${(0.6+rnd()*1.2).toFixed(2)}" fill="${col}"/>`;return s}
+function grad(id,a,b){return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>`}
+
+const ART={
+intro:()=>`<rect width="240" height="160" fill="#9CC9D9"/>
+<path d="M-5 112C40 98 70 116 112 106S190 96 245 106V165H-5Z" fill="#EFD39B"/>
+<path d="M-5 46C30 34 52 56 92 48S140 20 178 28L182 -5H-5Z" fill="#EFD39B"/>
+<path d="M200 -5C204 22 226 30 245 34V-5Z" fill="#EFD39B"/>
+<path d="M28 124C64 112 70 74 118 74S186 54 214 30" fill="none" stroke="#D3304A" stroke-width="3.2" stroke-dasharray="1 8" stroke-linecap="round"/>
+<path d="M206 26l10 2-4 9z" fill="#D3304A"/>
+<g transform="translate(206,122)"><circle r="17" fill="#FFF9EE" stroke="#1D2430" stroke-width="2"/><path d="M0 -14L3.5 -3.5L14 0L3.5 3.5L0 14L-3.5 3.5L-14 0L-3.5 -3.5Z" fill="#1D2430"/><path d="M0 -14L3.5 -3.5L0 0L-3.5 -3.5Z" fill="#D3304A"/></g>
+${fig(46,142,42,'#3E6E9E',{hood:'#EDE3CF',staff:1})}${fig(66,142,36,'#B5473A',{hood:'#F1C27D',skin:SKIN[1]})}${fig(82,142,24,'#5C8A4E',{skin:SKIN[3]})}${fig(97,142,29,'#7A3E5A',{skin:SKIN[2],kippah:'#1D2430'})}`,
+
+tent:()=>`${grad('gTent','#16244A','#3E5487')}<rect width="240" height="160" fill="url(#gTent)"/>${stars(46,7,240,95,'#FFF4C9')}
+<circle cx="196" cy="26" r="2.4" fill="#FFF4C9"/><circle cx="210" cy="40" r="1.8" fill="#FFF4C9"/>
+<path d="M-5 120Q60 104 120 116T245 112V165H-5Z" fill="#C9A267"/>
+<path d="M14 130L58 84L102 130Z" fill="#7B4B2A"/><path d="M58 84L70 130H46Z" fill="#3F2615"/><line x1="58" y1="84" x2="58" y2="76" stroke="#3F2615" stroke-width="3"/>
+<path d="M22 122L94 122" stroke="#E7C98C" stroke-width="3" opacity=".5"/>
+<g fill="#B07F4A"><ellipse cx="196" cy="112" rx="21" ry="10"/><path d="M183 106Q194 86 207 106Z"/><path d="M213 110Q224 98 222 86L229 86Q231 100 220 114Z"/><ellipse cx="229" cy="86" rx="7" ry="4.5"/></g>
+<g stroke="#B07F4A" stroke-width="4" stroke-linecap="round"><path d="M182 118V134M188 119V134M204 119V134M210 118V134"/></g>
+${fig(124,138,46,'#EDE3CF',{hood:'#8C6A43',staff:1})}${fig(148,138,40,'#7A3E5A',{hood:'#D9A6B5',skin:SKIN[1]})}`,
+
+egypt:()=>`${grad('gEg','#FBE3A6','#F4B860')}<rect width="240" height="160" fill="url(#gEg)"/><circle cx="200" cy="32" r="16" fill="#FFF3C4"/>
+<path d="M4 120L56 54L108 120Z" fill="#E0AF5D"/><path d="M56 54L108 120H74Z" fill="#B9853A"/>
+<path d="M84 120L118 76L152 120Z" fill="#E0AF5D"/><path d="M118 76L152 120H128Z" fill="#B9853A"/>
+<rect y="118" width="240" height="42" fill="#E8C887"/>
+<path d="M-5 140Q120 128 245 142V152Q120 138 -5 152Z" fill="#4C9AB8"/>
+<g stroke="#9C7A2E" stroke-width="2" fill="#D9A94A"><path d="M226 120V96M232 120V100M220 120V102" fill="none"/><ellipse cx="226" cy="94" rx="3" ry="6"/><ellipse cx="232" cy="98" rx="3" ry="6"/><ellipse cx="220" cy="100" rx="3" ry="6"/></g>
+${fig(132,132,32,'#3E6E9E',{hood:'#EDE3CF',staff:1})}${fig(149,132,28,'#B5473A',{hood:'#F1C27D',skin:SKIN[1]})}${fig(163,132,19,'#5C8A4E',{skin:SKIN[3]})}${fig(176,132,26,'#7A3E5A',{hood:'#E3D1A8',bag:'#8B5A33'})}
+${fig(204,132,34,'#F7F1E1',{skin:SKIN[3]})}<path d="M198 108Q204 114 210 108" fill="none" stroke="#E2A72E" stroke-width="3"/>`,
+
+sea:()=>`<rect width="240" height="160" fill="#CDE7EE"/>
+<path d="M62 96L120 30L178 96Z" fill="#9C7B5B"/><path d="M120 30L178 96H140Z" fill="#7E6248"/>
+<rect x="109" y="16" width="10" height="14" rx="4" fill="#F4EEDD" stroke="#6B5640"/><rect x="121" y="16" width="10" height="14" rx="4" fill="#F4EEDD" stroke="#6B5640"/>
+<path d="M92 165L110 92H130L148 165Z" fill="#E7C98C"/>
+<path d="M-5 165V72Q18 58 40 70T80 66Q98 60 110 92L92 165Z" fill="#2F7FA6"/>
+<path d="M245 165V72Q222 58 200 70T160 66Q142 60 130 92L148 165Z" fill="#2F7FA6"/>
+<path d="M4 84Q22 76 40 84M10 110Q30 102 50 110M196 84Q214 76 232 84M188 112Q208 104 228 112" fill="none" stroke="#BFE3F0" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M-5 72Q18 58 40 70T80 66Q98 60 110 92M245 72Q222 58 200 70T160 66Q142 60 130 92" fill="none" stroke="#F4FBFD" stroke-width="3"/>
+${fig(117,106,12,'#7A3E5A')}${fig(125,114,14,'#3E6E9E',{skin:SKIN[1]})}${fig(114,126,17,'#5C8A4E',{skin:SKIN[3]})}${fig(127,140,21,'#B5473A',{hood:'#F1C27D'})}${fig(112,158,26,'#EDE3CF',{hood:'#8C6A43',staff:1,skin:SKIN[2]})}`,
+
+river:()=>`${grad('gRv','#F2B880','#9E6B8F')}<rect width="240" height="160" fill="url(#gRv)"/>
+<path d="M148 98h66v-10h-9v-10h-9v-10h-14v10h-9v10h-9v10z" fill="#7E4F66" opacity=".75"/>
+<rect y="96" width="240" height="18" fill="#93A85E"/><rect y="112" width="240" height="20" fill="#3F7FA0"/>
+<path d="M10 120h30M70 125h40M150 119h30M196 126h30" stroke="#8CC3DA" stroke-width="2" stroke-linecap="round"/>
+<rect y="130" width="240" height="30" fill="#93A85E"/>
+<path d="M58 112C60 92 62 76 64 58" stroke="#5B3B24" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M64 64Q84 58 96 66" stroke="#5B3B24" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+<ellipse cx="64" cy="56" rx="34" ry="16" fill="#7FAE5C"/>
+<g fill="none" stroke="#6E9B4E" stroke-width="2.5" stroke-linecap="round">${Array.from({length:13},(_,i)=>{const x=34+i*5;return `<path d="M${x} 58Q${x-3} 80 ${x+1} ${96-Math.abs(6-i)*2}"/>`}).join('')}</g>
+<path d="M92 66V74" stroke="#5B3B24" stroke-width="1.5"/>
+<path d="M88 74V96H102Q100 82 88 74Z" fill="none" stroke="#C99A3B" stroke-width="2.6"/>
+<path d="M91 77V96M94 79V96M97 83V96" stroke="#E9D9A8" stroke-width="1"/>
+${fig(140,152,26,'#5D5A7E',{hood:'#B9A7C7'})}${fig(160,152,22,'#7A5A43',{hood:'#D8C2A0',skin:SKIN[1]})}${fig(180,152,24,'#41617A',{skin:SKIN[3],kippah:'#1D2430'})}`,
+
+menorah:()=>{let arms='',flames='';[8,17,26].forEach(r=>{arms+=`<path d="M${120-r} 66V80A${r} ${r} 0 0 0 ${120+r} 80V66" fill="none" stroke="#E2A72E" stroke-width="3.4"/>`});
+ [-26,-17,-8,0,8,17,26].forEach(d=>{flames+=`<path d="M${120+d} 54C${116+d} 60 ${117+d} 64 ${120+d} 65C${123+d} 64 ${124+d} 60 ${120+d} 54Z" fill="#FF9E2C"/>`});
+ return `<rect width="240" height="160" fill="#EAD8B6"/><rect x="34" y="28" width="172" height="22" fill="#CDB487"/><rect x="40" y="50" width="160" height="110" fill="#D8C29A"/>
+<path d="M84 160V100A36 36 0 0 1 156 100V160Z" fill="#6F5C44"/>
+<path d="M52 56V160M70 56V160M170 56V160M188 56V160" stroke="#C3AB7E" stroke-width="3"/>
+<rect x="64" y="34" width="112" height="10" fill="#BFA474"/>
+${arms}<rect x="118.3" y="66" width="3.4" height="80" fill="#E2A72E"/><path d="M102 156h36l-5-10h-26z" fill="#E2A72E"/>${flames}`},
+
+books:()=>`<rect width="240" height="160" fill="#F1DEC0"/>
+<path d="M24 150V72A36 36 0 1 1 96 72V150Z" fill="#244A6B"/><g transform="translate(32,46)">${stars(16,3,56,70,'#FFF4C9')}</g>
+<path d="M24 150V72A36 36 0 1 1 96 72V150" fill="none" stroke="#B5473A" stroke-width="7"/>
+<rect y="118" width="240" height="42" fill="#8B5A33"/><rect y="116" width="240" height="5" fill="#6E4325"/>
+<path d="M112 114Q134 100 156 110Q178 100 200 114V120Q178 108 156 118Q134 108 112 120Z" fill="#FFF9EE" stroke="#6B5640"/>
+<path d="M120 112Q134 104 150 110M120 116Q134 108 150 114M162 110Q178 104 192 112M162 114Q178 108 192 116" stroke="#B9A98C" stroke-width="1.2" fill="none"/>
+<rect x="206" y="96" width="30" height="8" rx="2" fill="#3E6E9E"/><rect x="204" y="104" width="32" height="8" rx="2" fill="#B5473A"/><rect x="207" y="88" width="27" height="8" rx="2" fill="#5C8A4E"/>
+<rect x="102" y="80" width="8" height="34" fill="#F4EEDD"/><path d="M106 66C102 72 103 77 106 78C109 77 110 72 106 66Z" fill="#FF9E2C"/><path d="M98 114h16" stroke="#C99A3B" stroke-width="4"/>
+<path d="M200 60L170 104" stroke="#3a2a1a" stroke-width="2"/><path d="M200 60Q214 64 206 82Q196 74 200 60Z" fill="#F7F1E1" stroke="#9C8A6A"/>`,
+
+ship:()=>`${grad('gSh','#F7C59F','#AFD6E3')}<rect width="240" height="160" fill="url(#gSh)"/><circle cx="56" cy="104" r="20" fill="#FFE2A8"/>
+<rect y="110" width="240" height="50" fill="#2F7FA6"/>
+<path d="M68 112L176 112L164 134H82Z" fill="#7B4B2A"/><path d="M150 96H180L176 112H150Z" fill="#6A3F22"/><path d="M66 104H84V112H68Z" fill="#6A3F22"/>
+<path d="M110 112V36M146 112V52M80 104V64" stroke="#4A2C18" stroke-width="3"/>
+<path d="M92 100Q102 70 92 44H128Q138 70 128 100Z" fill="#FFF9EE"/><path d="M132 102Q140 80 132 60H160Q168 80 160 102Z" fill="#FFF9EE"/><path d="M80 66L96 96H80Z" fill="#FFF9EE"/>
+<g fill="#C98E5F"><circle cx="96" cy="108" r="3"/><circle cx="104" cy="107" r="3.4"/><circle cx="120" cy="108" r="3"/><circle cx="128" cy="107" r="2.6"/><circle cx="138" cy="108" r="3.2"/></g>
+<path d="M0 132Q20 126 40 132T80 132T120 132T160 132T200 132T240 132M0 146Q20 140 40 146T80 146T120 146T160 146T200 146T240 146" fill="none" stroke="#9FD0E2" stroke-width="2.5"/>
+<path d="M190 40l6 5 6-5M206 54l5 4 5-4" fill="none" stroke="#3a2a1a" stroke-width="1.8" stroke-linecap="round"/>`,
+
+liberty:()=>`<rect width="240" height="160" fill="#DCEAF0"/><rect y="116" width="240" height="44" fill="#3D7FA0"/>
+<path d="M180 116V108H240V116Z" fill="#7F9A6E"/><path d="M196 108V88H224V108Z" fill="#B7AE9C"/><path d="M200 88V82H220V88Z" fill="#A49B88"/>
+<path d="M203 82L206 50H214L217 82Z" fill="#6FA597"/><circle cx="210" cy="45" r="5" fill="#6FA597"/>
+<path d="M204 42L200 37M207 40L206 34M210 40V33M213 40L214 34M216 42L220 37" stroke="#6FA597" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M213 54L222 30" stroke="#6FA597" stroke-width="4.5" stroke-linecap="round"/><path d="M219 30H226L224 26H221Z" fill="#E2A72E"/><path d="M222.5 26C220 22 222 19 222.5 16C224 19 226 22 222.5 26Z" fill="#FF9E2C"/>
+<path d="M200 62L196 74" stroke="#6FA597" stroke-width="4" stroke-linecap="round"/>
+<path d="M18 116H150L140 136H30Z" fill="#2B2F3A"/><rect x="40" y="100" width="90" height="16" fill="#FFF9EE"/>
+<g fill="#7FB4CC"><circle cx="50" cy="108" r="2.6"/><circle cx="62" cy="108" r="2.6"/><circle cx="74" cy="108" r="2.6"/><circle cx="86" cy="108" r="2.6"/><circle cx="98" cy="108" r="2.6"/><circle cx="110" cy="108" r="2.6"/><circle cx="122" cy="108" r="2.6"/></g>
+<rect x="60" y="76" width="14" height="24" fill="#B5473A"/><rect x="90" y="76" width="14" height="24" fill="#B5473A"/><rect x="60" y="76" width="14" height="5" fill="#2B2F3A"/><rect x="90" y="76" width="14" height="5" fill="#2B2F3A"/>
+<g fill="#AEB7BE" opacity=".85"><circle cx="70" cy="66" r="7"/><circle cx="80" cy="56" r="9"/><circle cx="98" cy="64" r="7"/><circle cx="110" cy="54" r="9"/></g>
+<g fill="#C98E5F"><circle cx="48" cy="96" r="3"/><circle cx="56" cy="96" r="3.4"/><circle cx="112" cy="96" r="3"/><circle cx="120" cy="96" r="2.6"/></g>`,
+
+candle:()=>`<defs><radialGradient id="gCd" cx=".5" cy=".42" r=".5"><stop offset="0" stop-color="#F6C35B" stop-opacity=".55"/><stop offset="1" stop-color="#F6C35B" stop-opacity="0"/></radialGradient></defs>
+<rect width="240" height="160" fill="#1E2433"/><circle cx="120" cy="70" r="74" fill="url(#gCd)"/>
+<rect x="100" y="78" width="40" height="58" rx="6" fill="#F4EFE6" opacity=".92"/><rect x="100" y="78" width="40" height="8" rx="4" fill="#E2D8C6"/>
+<path d="M120 52C112 64 114 74 120 77C126 74 128 64 120 52Z" fill="#FFB43A"/><path d="M120 62C117 68 118 73 120 74C122 73 123 68 120 62Z" fill="#FFF0B8"/>
+<line x1="120" y1="77" x2="120" y2="82" stroke="#3a2a1a" stroke-width="1.5"/>
+<rect x="60" y="136" width="120" height="6" rx="3" fill="#2C3346"/>
+<g fill="#8E95A3"><ellipse cx="160" cy="133" rx="7" ry="4.5"/><ellipse cx="172" cy="134" rx="5" ry="3.5"/><ellipse cx="80" cy="134" rx="6" ry="4"/></g>`,
+
+plane:()=>`${grad('gPl','#7FC0E2','#E6F4FA')}<rect width="240" height="160" fill="url(#gPl)"/>
+<ellipse cx="60" cy="34" rx="18" ry="6" fill="#fff" opacity=".85"/><ellipse cx="72" cy="30" rx="12" ry="6" fill="#fff" opacity=".85"/>
+<g transform="translate(150,40) rotate(-8)"><path d="M-44 0Q-44 -8 -30 -8H40Q52 -6 54 0Q52 6 40 8H-30Q-44 8 -44 0Z" fill="#FFFFFF" stroke="#9CB4C2"/><path d="M-6 2L-24 26H-14L14 4Z" fill="#DDE7EC" stroke="#9CB4C2"/><path d="M-6 -2L-18 -20H-10L10 -4Z" fill="#DDE7EC" stroke="#9CB4C2"/><path d="M-38 -6L-46 -22H-38L-28 -7Z" fill="#2F6DB5"/>
+<g fill="#2F6DB5">${[-20,-12,-4,4,12,20,28].map(x=>`<circle cx="${x}" cy="-2" r="1.8"/>`).join('')}</g></g>
+<rect y="132" width="240" height="28" fill="#E7D7B0"/>
+<line x1="36" y1="150" x2="36" y2="48" stroke="#7A6A55" stroke-width="3"/>
+<rect x="38" y="50" width="60" height="42" fill="#FFFFFF" stroke="#D5DDE2"/><rect x="38" y="55" width="60" height="5" fill="#2054A8"/><rect x="38" y="82" width="60" height="5" fill="#2054A8"/>
+<path d="M68 63L74.5 74.5H61.5ZM68 78L61.5 66.5H74.5Z" fill="none" stroke="#2054A8" stroke-width="1.8"/>
+${fig(118,150,30,'#3E6E9E',{skin:SKIN[4],bag:'#B5473A'})}${fig(140,150,24,'#E2A72E',{skin:SKIN[2]})}${fig(160,150,32,'#5C8A4E',{skin:SKIN[1],kippah:'#2054A8',bag:'#7B4B2A'})}${fig(184,150,28,'#B5473A',{skin:SKIN[3],hood:'#F1C27D'})}${fig(206,150,20,'#7A3E5A',{skin:SKIN[0]})}`,
+
+suitcase:()=>`${grad('gSc','#BFE3F2','#EAF6FB')}<rect width="240" height="160" fill="url(#gSc)"/><circle cx="34" cy="30" r="14" fill="#FFF3C4"/>
+<path d="M-5 128Q120 112 245 128V165H-5Z" fill="#B9D38A"/><path d="M96 165L118 120H124L150 165Z" fill="#E7D7B0"/>
+<line x1="186" y1="140" x2="186" y2="44" stroke="#7A5230" stroke-width="4"/>
+<path d="M188 50H226L234 57L226 64H188Z" fill="#2F6DB5"/><path d="M184 70H150L142 77L150 84H184Z" fill="#14866A"/><path d="M188 90H222L230 97L222 104H188Z" fill="#E2A72E"/>
+<g fill="#FFF9EE"><circle cx="207" cy="57" r="2"/><circle cx="163" cy="77" r="2"/><circle cx="205" cy="97" r="2"/></g>
+${fig(52,146,40,'#3E6E9E',{skin:SKIN[1],kippah:'#1D2430',bag:'#B5473A'})}${fig(76,146,34,'#7A3E5A',{skin:SKIN[2]})}
+<rect x="85" y="122" width="16" height="13" rx="2" fill="#2F6DB5" stroke="#1D2430" stroke-width=".8"/><path d="M90 122V119H96V122" fill="none" stroke="#1D2430" stroke-width="1.4"/>
+${fig(118,146,30,'#5C8A4E',{skin:SKIN[3]})}<path d="M110 113L118 109L126 113L118 117Z" fill="#1D2430"/><path d="M125 113V119" stroke="#E2A72E" stroke-width="1.2"/>
+${fig(146,146,22,'#E2A72E',{skin:SKIN[0]})}<rect x="128" y="128" width="12" height="9" rx="1.5" fill="#7B4B2A"/>`,
+world:()=>{const tones=[[1,'#3E6E9E'],[4,'#B5473A'],[2,'#5C8A4E'],[0,'#7A3E5A'],[3,'#E2A72E'],[1,'#41617A'],[2,'#B5473A'],[4,'#5C8A4E']];
+ let people='';tones.forEach(([s,c],i)=>{const ang=Math.PI*(1.08+i*0.84/7*1.0)+0;const x=120+Math.cos(Math.PI-(i/(tones.length-1))*Math.PI)*92, y=150-Math.sin((i/(tones.length-1))*Math.PI)*20;people+=fig(x,152,i%3===1?20:28,c,{skin:SKIN[s],kippah:i%2?'#1D2430':null})});
+ return `<rect width="240" height="160" fill="#CFE7F1"/>${stars(0,1,1,1,'#fff')}
+<circle cx="120" cy="78" r="58" fill="#4C9AB8"/>
+<path d="M78 46C90 38 104 42 110 50S104 66 96 70S80 72 74 62S70 52 78 46Z" fill="#EFD39B"/>
+<path d="M118 30C132 26 150 32 156 44S148 58 140 60S124 52 120 46S110 34 118 30Z" fill="#EFD39B"/>
+<path d="M124 64C136 62 146 70 148 84S142 108 132 116S118 110 116 98S112 70 124 64Z" fill="#EFD39B"/>
+<path d="M156 92C164 88 172 92 170 100S160 108 154 104S150 96 156 92Z" fill="#EFD39B"/>
+<path d="M66 82C74 80 80 88 82 98S78 116 72 118S64 104 64 96S60 84 66 82Z" fill="#EFD39B"/>
+<g fill="#F2B134" stroke="#FFF9EE" stroke-width="1.5">${[[136,54,5],[92,52,4],[124,46,3.5],[140,80,3],[70,92,3],[160,98,3],[100,60,2.6]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}"/>`).join('')}</g>
+<g fill="none" stroke="#F2B134" stroke-width="1.4" stroke-dasharray="2 3" opacity=".9"><path d="M136 54Q114 40 92 52M136 54Q140 66 140 80M136 54Q130 46 124 46M136 54Q104 70 70 92M136 54Q156 74 160 98"/></g>
+<rect y="140" width="240" height="20" fill="#E7D7B0"/>${people}`},
+home:()=>`${grad('gHm','#FBE3A6','#F6B865')}<rect width="240" height="160" fill="url(#gHm)"/><circle cx="182" cy="44" r="18" fill="#FFF3C4"/>
+<g fill="#D9B477"><rect y="92" width="240" height="68"/><rect x="26" y="70" width="34" height="30"/><rect x="150" y="62" width="30" height="38"/>${Array.from({length:12},(_,i)=>`<rect x="${i*20+2}" y="84" width="10" height="9"/>`).join('')}<rect x="26" y="64" width="8" height="8"/><rect x="39" y="64" width="8" height="8"/><rect x="52" y="64" width="8" height="8"/><rect x="150" y="56" width="8" height="8"/><rect x="161" y="56" width="8" height="8"/><rect x="172" y="56" width="8" height="8"/></g>
+<path d="M98 160V122A22 22 0 0 1 142 122V160Z" fill="#9E7B48"/><path d="M38 96V84A5 5 0 0 1 48 84V96ZM160 90V78A5 5 0 0 1 170 78V90Z" fill="#9E7B48"/>
+<path d="M0 108H240" stroke="#C49E62" stroke-width="2"/>
+${fig(40,156,34,'#3E6E9E',{skin:SKIN[1],kippah:'#1D2430'})}${fig(62,156,26,'#B5473A',{skin:SKIN[4]})}${fig(82,156,30,'#5C8A4E',{skin:SKIN[2],hood:'#F1C27D'})}${fig(160,156,32,'#7A3E5A',{skin:SKIN[3]})}${fig(180,156,22,'#E2A72E',{skin:SKIN[0]})}${fig(200,156,30,'#41617A',{skin:SKIN[1],kippah:'#2054A8'})}`
+};
+// ---------- engine ----------
+const NS='http://www.w3.org/2000/svg';
+const $=id=>document.getElementById(id);
+const el=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);if(attrs)for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e};
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DEG=180/Math.PI;
+const P=(ll)=>[ll[0],-DEG*Math.log(Math.tan(Math.PI/4+ll[1]*Math.PI/360))];
+const ptOf=v=>typeof v==='string'?PLACES[v].p:v;
+const COL={exile:'#D3304A',home:'#14866A',choice:'#2F6DB5'};
+const colOf=r=>r.home?COL.home:r.choice?COL.choice:COL.exile;
+
+// settings (per-viewer convenience only)
+const store={get(){try{return JSON.parse(localStorage.getItem('opj-settings')||'{}')}catch(e){return {}}},set(v){try{localStorage.setItem('opj-settings',JSON.stringify(v))}catch(e){}}};
+const S=Object.assign({voiceOn:true,cc:true,voiceName:'',rate:{k:1,o:1},skip:{k:[],o:[]}},store.get());
+// speed is now 100% = normal for both versions (older saved settings used 90% for K-2)
+if(!S.rv2){S.rate={k:1,o:1};S.rv2=1;try{localStorage.setItem('opj-settings',JSON.stringify(S))}catch(e){}}
+const save=()=>store.set(S);
+
+// ---------- map ----------
+const svg=$('map');
+const defs=el('defs',null,svg);
+defs.innerHTML=`<radialGradient id="cglow"><stop offset="0" stop-color="#FFD27A" stop-opacity=".95"/><stop offset=".35" stop-color="#FFB43A" stop-opacity=".45"/><stop offset="1" stop-color="#FFB43A" stop-opacity="0"/></radialGradient>
+<linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2F7596"/><stop offset="1" stop-color="#235D78"/></linearGradient>`;
+const [cx0,cy0]=P([-79.6,64.6]),[cx1,cy1]=P([63.6,-3.6]);
+const clip=el('clipPath',{id:'box'},defs);el('rect',{x:cx0,y:cy0,width:cx1-cx0,height:cy1-cy0},clip);
+const seaTL=P([-200,80]),seaBR=P([200,-60]);
+el('rect',{x:seaTL[0],y:seaTL[1],width:seaBR[0]-seaTL[0],height:seaBR[1]-seaTL[1],fill:'url(#seaG)'},svg);
+const grat=el('g',{stroke:'#FFFFFF','stroke-opacity':'.08',fill:'none'},svg);
+for(let lon=-80;lon<=60;lon+=10){const a=P([lon,-4]),b=P([lon,64]);el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],'vector-effect':'non-scaling-stroke'},grat)}
+for(let lat=0;lat<=60;lat+=10){const a=P([-80,lat]),b=P([64,lat]);el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],'vector-effect':'non-scaling-stroke'},grat)}
+let landD='';
+LAND.split('|').forEach(r=>{const n=r.split(' ').map(Number);let d='';for(let i=0;i<n.length;i+=2){const q=P([n[i]/10,n[i+1]/10]);d+=(i?'L':'M')+q[0].toFixed(2)+' '+q[1].toFixed(2)}landD+=d+'Z'});
+const landG=el('g',{'clip-path':'url(#box)'},svg);
+el('path',{d:landD,fill:'#1B4C63',opacity:'.35',transform:'translate(.12,.16)','fill-rule':'evenodd'},landG);
+el('path',{d:landD,fill:'#EFD39B','fill-rule':'evenodd'},landG);
+el('path',{d:landD,fill:'none',stroke:'#C9A060','stroke-width':'1','vector-effect':'non-scaling-stroke','fill-rule':'evenodd',opacity:'.9'},landG);
+
+// borders: today's lines, or the polities of the scene's own time
+const landClip=el('clipPath',{id:'landclip'},defs);el('path',{d:landD},landClip);
+const inland=el('mask',{id:'inland',maskUnits:'userSpaceOnUse',x:seaTL[0],y:seaTL[1],width:seaBR[0]-seaTL[0],height:seaBR[1]-seaTL[1]},defs);
+el('path',{d:landD,fill:'#fff',stroke:'#000','stroke-width':'7','vector-effect':'non-scaling-stroke'},inland);
+const gBorders=el('g',{'clip-path':'url(#box)'},svg);
+el('path',{d:landD,fill:'none',stroke:'#C9A060','stroke-width':'1','vector-effect':'non-scaling-stroke',opacity:'.9','clip-path':'url(#box)'},svg);
+const TINTS=['#E7BF86','#F4DFB2','#DABF8E','#EDCB98','#E2B98F','#F0D6A6'];
+const ringD=r=>{const n=r.split(' ').map(Number);let s='';for(let i=0;i<n.length;i+=2){const q=P([n[i]/10,n[i+1]/10]);s+=(i?'L':'M')+q[0].toFixed(2)+' '+q[1].toFixed(2)}return s};
+function buildEra(key){
+  const g=el('g',{class:'eramap'});
+  if(key==='modern'){
+    let dd='';BORDERS.split('|').forEach(r=>dd+=ringD(r));
+    el('path',{d:dd,fill:'none',stroke:'#8E6F45','stroke-width':'1.2','stroke-opacity':'.7','stroke-linejoin':'round','vector-effect':'non-scaling-stroke'},g);
+    return g;
+  }
+  const feats=ERAS[key].split('|').map(f=>{const [name,rs]=f.split('#');const d=rs.split(';').map(r=>ringD(r)+'Z').join('');
+    const n=rs.split(/[ ;]/).map(Number);let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(let i=0;i<n.length;i+=2){x0=Math.min(x0,n[i]);x1=Math.max(x1,n[i]);y0=Math.min(y0,n[i+1]);y1=Math.max(y1,n[i+1])}
+    return {name,d,bb:[x0,y0,x1,y1]}});
+  // neighbours get different tints
+  feats.forEach((f,i)=>{const used=new Set();for(let j=0;j<i;j++){const o=feats[j].bb,b=f.bb;if(o[0]<=b[2]+5&&b[0]<=o[2]+5&&o[1]<=b[3]+5&&b[1]<=o[3]+5)used.add(feats[j].c)}f.c=0;while(used.has(f.c)&&f.c<TINTS.length-1)f.c++});
+  const fills=el('g',{'clip-path':'url(#landclip)'},g), lines=el('g',{mask:'url(#inland)'},g);
+  feats.forEach(f=>{el('path',{d:f.d,fill:TINTS[f.c],'fill-rule':'evenodd'},fills);el('path',{d:f.d,fill:'none',stroke:'#7E6040','stroke-width':'1.25','stroke-opacity':'.75','stroke-linejoin':'round','vector-effect':'non-scaling-stroke'},lines)});
+  return g;
+}
+let curEra=null, eraLabelObjs=[];
+function setEra(key,instant){
+  if(key===curEra)return;curEra=key;
+  [...gBorders.children].forEach(old=>{old.style.opacity=0;setTimeout(()=>old.remove(),instant?0:1300)});
+  const g=buildEra(key);g.style.opacity=instant||reduceMotion?1:0;gBorders.appendChild(g);
+  if(!instant&&!reduceMotion)requestAnimationFrame(()=>requestAnimationFrame(()=>g.style.opacity=1));
+  eraLabelObjs.forEach(o=>o.g.remove());eraLabelObjs=(ERA_LABELS[key]||[]).map(([t,lon,lat])=>addScaled(gEraLabels,[lon,lat],`<text class="elabel" text-anchor="middle">${t}</text>`));
+  $('mapyear').textContent='Borders: '+MAP_YEAR[key];
+}
+const gGlobal=el('g',null,svg), gEraLabels=el('g',null,svg), gRegions=el('g',null,svg), gTrails=el('g',null,svg), gRoutes=el('g',null,svg);
+const dimmer=el('rect',{id:'dimmer',x:seaTL[0],y:seaTL[1],width:seaBR[0]-seaTL[0],height:seaBR[1]-seaTL[1],fill:'#0B1622',opacity:'0'},svg);
+const gFx=el('g',null,svg), gPlaces=el('g',null,svg), gTips=el('g',null,svg);
+
+// scalable things: groups positioned at map coords, drawn in screen px
+let scaled=[]; // {g,x,y,rot}
+function addScaled(parent,ll,inner,rot=0,cls){const [x,y]=P(ll);const g=el('g',cls?{class:cls}:null,parent);g.innerHTML=inner;const o={g,x,y,rot};scaled.push(o);return o}
+function labelMarkup(text,a,cls='plabel',dot=true){
+  const off={r:[10,5,'start'],l:[-10,5,'end'],t:[0,-11,'middle'],b:[0,21,'middle']}[a||'r'];
+  return (dot?`<circle class="pdot" r="5"/>`:'')+`<text class="${cls}" x="${off[0]}" y="${off[1]}" text-anchor="${off[2]}">${text}</text>`;
+}
+const globals=GLOBAL_LABELS.map(([t,lon,lat,cls,minW,maxW])=>{const o=addScaled(gGlobal,[lon,lat],`<text class="${cls}" text-anchor="middle">${t}</text>`);o.minW=minW;o.maxW=maxW;return o});
+// Jerusalem, always
+const jer=addScaled(svg,PLACES.jerusalem.p,`<circle class="pulse" r="9"/><path class="jstar" d="M0 -9L2.6 -3.6L8.6 -2.8L4.2 1.4L5.3 7.3L0 4.5L-5.3 7.3L-4.2 1.4L-8.6 -2.8L-2.6 -3.6Z"/><text class="plabel" x="0" y="24" text-anchor="middle">Jerusalem</text>`);
+
+// ---------- camera ----------
+let vb={x:-77,y:-70,w:140,h:80}, tw=null, curView=SCENES[0].view;
+function insets(){
+  const st=$('stage').getBoundingClientRect(), tc=$('titlecard').getBoundingClientRect(), cap=$('caption'), art=$('artcard');
+  const wide=st.width>760;
+  const t=tc.bottom-st.top+10;
+  const b=(cap.hidden?0:Math.max(cap.offsetHeight,70)+22);
+  const r=(wide&&art.offsetParent)?art.offsetWidth+30:14;
+  return {t:Math.min(t,st.height*.4),b:Math.min(b,st.height*.35),l:14,r};
+}
+function fit(view){
+  const a=P([view[0],view[3]]),b=P([view[2],view[1]]);
+  const W=svg.clientWidth||800,H=svg.clientHeight||500,ins=insets();
+  const iw=Math.max(60,W-ins.l-ins.r),ih=Math.max(60,H-ins.t-ins.b);
+  const s=Math.max((b[0]-a[0])/iw,(b[1]-a[1])/ih);
+  const cx=(a[0]+b[0])/2,cy=(a[1]+b[1])/2;
+  return {x:cx-(ins.l+iw/2)*s,y:cy-(ins.t+ih/2)*s,w:W*s,h:H*s};
+}
+function flyTo(view,instant){curView=view;const t=fit(view);if(instant||reduceMotion){vb=t;tw=null;return}tw={from:{...vb},to:t,t0:performance.now(),dur:1800}}
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+addEventListener('resize',()=>{const t=fit(curView);if(tw)tw.to=t;else vb=t});
+
+// ---------- scene state ----------
+let version='k', list=[], idx=0, playing=false, started=false;
+let routes=[]; // {main,casing,L,tip,arrow,mode,start,dur,done,ll}
+let sceneT0=0, pausedAt=null, pauseAcc=0;
+const clock=()=>((pausedAt??performance.now())-sceneT0-pauseAcc);
+const tx=(o)=>typeof o==='object'&&o!==null?o[version]:o;
+const lbl=(p)=>typeof p.l==='object'?p.l[version]:p.l;
+
+function buildList(){list=SCENES.filter(s=>s.v.includes(version)&&!S.skip[version].includes(s.id))}
+function routesFor(sc){return (sc.routes||[]).filter(r=>!r.v||r.v===version)}
+
+function pathFor(r){
+  const ps=r.pts.map(v=>P(ptOf(v)));
+  const f=p=>p[0].toFixed(3)+' '+p[1].toFixed(3);
+  if(r.mode==='air'){const [a,b]=ps;const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy);let nx=-dy/L,ny=dx/L;if(ny>0){nx=-nx;ny=-ny}if(r.bulge<0){nx=-nx;ny=-ny}
+    const c=[(a[0]+b[0])/2+nx*L*.2,(a[1]+b[1])/2+ny*L*.2];return `M${f(a)}Q${f(c)} ${f(b)}`}
+  let d='M'+f(ps[0]);
+  for(let i=0;i<ps.length-1;i++){const p0=ps[i-1]||ps[i],p1=ps[i],p2=ps[i+1],p3=ps[i+2]||p2;
+    d+=`C${f([p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6])} ${f([p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6])} ${f(p2)}`}
+  return d;
+}
+const TIP={
+  walk:`<circle r="15" fill="#FFF9EE" stroke="currentColor" stroke-width="3"/><circle cx="-4" cy="-6.5" r="2.8" fill="#1D2430"/><path d="M-8.5 9L-6.8 -2.5Q-4 -4.2 -1.2 -2.5L0.5 9Z" fill="#1D2430"/><circle cx="5" cy="-3" r="2.3" fill="#1D2430"/><path d="M1.6 9L3.2 0Q5 -1.5 6.8 0L8.4 9Z" fill="#1D2430"/>`,
+  sea:`<circle r="15" fill="#FFF9EE" stroke="currentColor" stroke-width="3"/><path d="M-10 3H10L6.5 9H-6.5Z" fill="#1D2430"/><path d="M-0.5 2V-10L8 1Z" fill="#1D2430"/><path d="M-2 1H-9L-2 -7.5Z" fill="#1D2430"/>`,
+  suitcase:`<circle r="15" fill="#FFF9EE" stroke="currentColor" stroke-width="3"/><rect x="-8" y="-4" width="16" height="11" rx="2" fill="#1D2430"/><path d="M-3.5 -4V-7.5H3.5V-4" fill="none" stroke="#1D2430" stroke-width="2"/><path d="M-8 1H8" stroke="#FFF9EE" stroke-width="1.2"/>`,
+  air:`<path d="M15 0L4 -2.2L-3 -12.5H-7.5L-3.5 -2.2H-10L-13 -7H-16.5L-14.2 0L-16.5 7H-13L-10 2.2H-3.5L-7.5 12.5H-3L4 2.2Z" fill="#1D2430" stroke="#FFF9EE" stroke-width="2" stroke-linejoin="round"/>`
+};
+const ARROW=`<path d="M4 0L-12 -8L-7.5 0L-12 8Z" fill="currentColor" stroke="#FFF9EE" stroke-width="1.8" stroke-linejoin="round"/>`;
+
+function drawTrail(r,strong){const d=pathFor(r);el('path',{d,fill:'none',stroke:colOf(r),'stroke-linecap':'round','stroke-opacity':strong?'.85':'.4','data-w':strong?'3':'2.2'},gTrails)}
+
+function clearScene(){gRoutes.innerHTML='';gTrails.innerHTML='';gPlaces.innerHTML='';gRegions.innerHTML='';gFx.innerHTML='';gTips.innerHTML='';
+  scaled=scaled.filter(o=>o.g.isConnected);routes=[];dimmer.setAttribute('opacity','0')}
+
+function renderScene(){
+  clearScene();zoomedOut=false;
+  const sc=list[idx];
+  setEra(SCENE_MAP[sc.id]||'modern');
+  // trails from earlier scenes
+  const finale=sc.fx==='finale';
+  for(let j=0;j<idx;j++)routesFor(list[j]).forEach(r=>drawTrail(r,finale));
+  // places
+  const keys=new Set(sc.places||[]);
+  routesFor(sc).forEach(r=>r.pts.forEach(p=>{if(typeof p==='string')keys.add(p)}));
+  keys.delete('jerusalem');
+  keys.forEach(k=>{const p=PLACES[k];if(p.l)addScaled(gPlaces,p.p,labelMarkup(lbl(p),p.a))});
+  (sc.regions||[]).forEach(([t,lon,lat,v])=>{if(!v||v===version)addScaled(gRegions,[lon,lat],`<text class="rlabel" text-anchor="middle">${t}</text>`)});
+  // routes
+  routesFor(sc).forEach((r,i)=>{
+    const d=pathFor(r), col=colOf(r);
+    const casing=el('path',{d,fill:'none',stroke:'#FFF9EE','stroke-linecap':'round','stroke-opacity':'.75'},gRoutes);
+    const main=el('path',{d,fill:'none',stroke:col,'stroke-linecap':'round'},gRoutes);
+    const L=main.getTotalLength();
+    [casing,main].forEach(p=>{p.style.strokeDasharray=`${L} ${L}`;p.style.strokeDashoffset=L});
+    const tip=addScaled(gTips,[0,0],(r.choice&&r.mode!=='air'?TIP.suitcase:TIP[r.mode])||TIP.walk);tip.g.style.color=col;tip.g.style.display='none';
+    const arrow=addScaled(gTips,[0,0],ARROW);arrow.g.style.color=col;arrow.g.style.display='none';
+    const at=tx(r.at);
+    const dur0=(r.dur||({walk:4500,sea:6000,air:3500}[r.mode]))*1.2, delay0=(r.delay||0)*1.2;
+    routes.push({main,casing,L,tip,arrow,mode:r.mode,at:at==null?null:at,delay0,dur0,delay:delay0,dur:dur0,start:null,done:false});
+  });
+  // effects
+  if(sc.fx==='communities'){
+    const lab={Israel:'l','United States':'r',Canada:'t','United Kingdom':'l',France:'b',Germany:'t',Russia:'r'};
+    COMMUNITIES.forEach(([name,ll,n],i)=>{const r=(3+Math.sqrt(n)/160).toFixed(1);
+      const t=lab[name]?labelMarkup(name,lab[name],'plabel',false).replace(/x="(-?\d+)"/,(m,v)=>`x="${+v<0?+v-r+6:+v>0?+v+(+r)-6:0}"`).replace(/y="(\d+)"/,(m,v)=>lab[name]==='b'?`y="${+v+(+r)-6}"`:lab[name]==='t'?`y="${-r-6}"`:m):'';
+      const o=addScaled(gFx,ll,`<circle r="${(r*1.9).toFixed(1)}" fill="url(#cglow)" class="candle-glow"/><circle r="${r}" fill="#F2B134" fill-opacity=".85" stroke="#FFF9EE" stroke-width="2"/>${t}`,0,'candle');
+      setTimeout(()=>o.g.classList.add('on'),1500+i*420)});
+    BEYOND.forEach(([t,lon,lat])=>addScaled(gRegions,[lon,lat],`<text class="blabel" text-anchor="middle">${t}</text>`));
+  }
+  if(sc.fx==='candles'){
+    setTimeout(()=>dimmer.setAttribute('opacity','.42'),50);
+    (sc.candles||[]).forEach((k,i)=>{const o=addScaled(gFx,PLACES[k].p,`<circle class="candle-glow" r="26" fill="url(#cglow)"/><circle r="3.6" fill="#FFE3A0"/>`,0,'candle');
+      setTimeout(()=>o.g.classList.add('on'),1800+i*650)});
+  }
+  // routes with no sentence trigger start after the camera lands
+  routes.forEach(r=>{if(r.at==null)r.start=1800+r.delay});
+}
+let zoomedOut=false;
+function triggerSentence(n){
+  const z=list[idx]&&list[idx].zoomOut;
+  if(z&&!zoomedOut&&n>=tx(z.at)){zoomedOut=true;flyTo(z.view)}
+  routes.forEach(r=>{if(r.start==null&&r.at!=null&&r.at<=n)r.start=clock()+r.delay});
+}
+function completeAll(){routes.forEach(r=>{if(r.start==null)r.start=-1e6});const z=list[idx]&&list[idx].zoomOut;if(z&&!zoomedOut){zoomedOut=true;flyTo(z.view)}}
+const routesEnd=()=>routes.reduce((m,r)=>Math.max(m,r.start==null?Infinity:r.start+r.dur),0);
+
+// ---------- frame loop ----------
+function frame(now){
+  requestAnimationFrame(frame);
+  if(tw){const k=Math.min(1,(now-tw.t0)/tw.dur),e=ease(k);vb={x:tw.from.x+(tw.to.x-tw.from.x)*e,y:tw.from.y+(tw.to.y-tw.from.y)*e,w:tw.from.w+(tw.to.w-tw.from.w)*e,h:tw.from.h+(tw.to.h-tw.from.h)*e};if(k>=1)tw=null}
+  svg.setAttribute('viewBox',`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  const s=vb.w/(svg.clientWidth||800);
+  const t=clock();
+  for(const r of routes){
+    let p=0;if(r.start!=null)p=Math.max(0,Math.min(1,(t-r.start)/r.dur));
+    const e=p<1?ease(p):1;
+    r.main.style.strokeDashoffset=r.L*(1-e);r.casing.style.strokeDashoffset=r.L*(1-e);
+    r.main.setAttribute('stroke-width',4.4*s);r.casing.setAttribute('stroke-width',8.5*s);
+    if(p>0&&p<1){const l=r.L*e,a=r.main.getPointAtLength(l),b=r.main.getPointAtLength(Math.max(0,l-r.L*.01));
+      r.tip.x=a.x;r.tip.y=a.y;r.tip.rot=r.mode==='air'?Math.atan2(a.y-b.y,a.x-b.x)*DEG:0;r.tip.g.style.display=''}
+    else r.tip.g.style.display='none';
+    if(p>=1&&!r.done){r.done=true;const a=r.main.getPointAtLength(r.L),b=r.main.getPointAtLength(r.L*.985);r.arrow.x=a.x;r.arrow.y=a.y;r.arrow.rot=Math.atan2(a.y-b.y,a.x-b.x)*DEG;r.arrow.g.style.display=''}
+    if(p<1&&r.done){r.done=false;r.arrow.g.style.display='none'}
+  }
+  gTrails.querySelectorAll('path').forEach(p=>p.setAttribute('stroke-width',(+p.dataset.w)*s));
+  for(const o of scaled){o.g.setAttribute('transform',`translate(${o.x} ${o.y}) rotate(${o.rot||0}) scale(${s})`)}
+  const eraLabelled=(ERA_LABELS[curEra]||[]).length>0;
+  for(const g of globals){g.g.style.opacity=(vb.w>=g.minW&&vb.w<=g.maxW&&!((eraLabelled||(list[idx]&&list[idx].fx==='communities'&&started))&&g.g.querySelector('.glabel')))?1:0}
+  gEraLabels.style.opacity=vb.w<80?1:0;
+}
+requestAnimationFrame(frame);
+
+// ---------- UI: title, art, timeline ----------
+function setCards(){
+  const sc=list[idx];
+  $('era').textContent=tx(sc.era);$('title').textContent=tx(sc.title);$('count').textContent=`Scene ${idx+1} of ${list.length}`;
+  $('art').innerHTML=`<svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">${ART[sc.art]()}</svg>`;
+  $('he').textContent=sc.he;$('tr').textContent=sc.tr;
+  const ac=$('artcard');ac.classList.remove('pop');void ac.offsetWidth;ac.classList.add('pop');
+  [...$('timeline').children].forEach((b,i)=>{b.className='tick'+(i<idx?' done':'')+(i===idx?' cur':'');b.setAttribute('aria-current',i===idx?'step':'false')});
+}
+function buildTimeline(){
+  const tl=$('timeline');tl.innerHTML='';
+  list.forEach((sc,i)=>{const b=document.createElement('button');b.type='button';b.className='tick';b.title=`${i+1}. ${tx(sc.title)} (${tx(sc.era)})`;b.setAttribute('aria-label',b.title);b.onclick=()=>go(i);tl.appendChild(b)});
+}
+function setCaption(text){const p=$('cap');p.classList.add('out');setTimeout(()=>{p.textContent=text;p.classList.remove('out')},reduceMotion?0:180)}
+function setPlayIcon(){$('playIcon').innerHTML=playing?'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>':'<path d="M7 4l13 8-13 8z"/>';$('play').setAttribute('aria-label',playing?'Pause':'Play')}
+
+// ---------- narration ----------
+const synth=('speechSynthesis' in window)?window.speechSynthesis:null;
+let voices=[], voice=null, token=0, sIdx=0, timers=[], currentU=null;
+const NOVELTY=/Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Deranged|Hysterical|Fred|Junior|Ralph|Kathy|Grandma|Grandpa|Eddy|Flo|Reed|Rocko|Sandy|Shelley/;
+const PREFER=['Samantha','Ava','Allison','Susan','Google US English','Microsoft Aria','Microsoft Jenny','Microsoft Zira','Karen','Moira','Tessa','Serena','Daniel'];
+function loadVoices(){
+  if(!synth)return;voices=synth.getVoices().filter(v=>/^en/i.test(v.lang)&&!NOVELTY.test(v.name));
+  const sel=$('optVoiceSel');sel.innerHTML='';
+  if(!voices.length){const o=document.createElement('option');o.textContent='Default voice';sel.appendChild(o);return}
+  voice=voices.find(v=>v.name===S.voiceName)||PREFER.map(n=>voices.find(v=>v.name.includes(n)&&/en[-_]US/i.test(v.lang))||voices.find(v=>v.name.includes(n))).find(Boolean)||voices.find(v=>/en[-_]US/i.test(v.lang))||voices[0];
+  voices.forEach(v=>{const o=document.createElement('option');o.value=v.name;o.textContent=`${v.name} (${v.lang})`;if(v===voice)o.selected=true;sel.appendChild(o)});
+}
+if(synth){loadVoices();synth.addEventListener?.('voiceschanged',loadVoices)}
+const speakable=t=>SAY.reduce((s,[re,to])=>s.replace(re,to),t);
+const rate=()=>S.rate[version]||1;            // the speed slider: 1 = normal
+const ttsRate=()=>rate()*(version==='k'?0.9:1); // the computer voice reads a little slower for K-2
+const est=t=>t.split(/\s+/).length/(2.75*ttsRate())*1000+400;
+const later=(fn,ms)=>{const h=setTimeout(fn,ms);timers.push(h);return h};
+let curAudio=null, fails=0;
+function stopNarration(){token++;timers.forEach(clearTimeout);timers=[];currentU=null;if(synth&&(synth.speaking||synth.pending))synth.cancel();if(curAudio){curAudio.pause();curAudio=null}}
+function notice(msg){const n=$('notice');if(!msg){n.hidden=true;return}n.querySelector('span').textContent=msg;n.hidden=false}
+const recKey=()=>version+'-'+list[idx].id;
+const noRecording=new Set();
+// in the folder copy the recordings are .m4a; on the website the same files are served as .mp4
+const AUDIO_EXT='.mp4';
+const recSrc=k=>noRecording.has(k)?null:(RECORDINGS[k]||'audio/'+k+AUDIO_EXT);
+
+function narrate(fromStart,now){
+  stopNarration();const my=token;
+  if(fromStart)sIdx=0;
+  // speaking inside the click itself is what Chrome trusts most
+  if(now)speakNext(my);else later(()=>speakNext(my),fromStart?1500:250);
+}
+function endOfScene(my){
+  const wait=Math.max(1400,routesEnd()-clock()+900);
+  later(()=>{if(my!==token||!playing)return;if(idx<list.length-1)go(idx+1);else finish()},wait);
+}
+// stretch the arrows to fit a recording: each group of arrows (started by the same sentence)
+// takes most of the time left in the recording, never faster than before and at most 3x slower
+function paceRoutes(starts,d){
+  const groups=new Map();
+  routes.forEach(r=>{const g=r.at==null?0:r.at;if(!groups.has(g))groups.set(g,[]);groups.get(g).push(r)});
+  groups.forEach((rs,g)=>{
+    const natural=Math.max(...rs.map(r=>r.delay0+r.dur0));
+    const avail=(d-(starts[g]||0))*1000*.85;
+    const f=Math.min(3,Math.max(1,avail/natural));
+    rs.forEach(r=>{if(r.done)return;r.dur=r.dur0*f;r.delay=r.delay0*f;if(r.at==null&&r.start!=null&&r.start>-1e5)r.start=1800+r.delay});
+  });
+}
+// a recorded narration for this scene: captions follow the audio, split by word count
+function playRecording(my,src){
+  const sents=list[idx][version], words=sents.map(s=>s.split(/\s+/).length), W=words.reduce((a,b)=>a+b,0);
+  const key=recKey(),a=new Audio(src);curAudio=a;a.preload='auto';const sp=rate();
+  const startFrom=sIdx;
+  a.addEventListener('loadedmetadata',()=>{
+    if(my!==token)return;const d=a.duration||W/2.6;let cum=0;const starts=words.map(w=>{const t=cum/W*d;cum+=w;return t});
+    paceRoutes(starts.map(t=>t/sp),d/sp);a.currentTime=starts[startFrom]||0;a.preservesPitch=true;a.playbackRate=sp;
+    a.play().then(()=>{
+      for(let i=startFrom;i<sents.length;i++)later(()=>{if(my!==token)return;sIdx=i;setCaption(sents[i]);triggerSentence(i)},Math.max(0,(starts[i]-starts[startFrom])*1000/sp));
+    }).catch(()=>{curAudio=null;speakNext(my,true)});
+  },{once:true});
+  a.addEventListener('ended',()=>{if(my!==token)return;curAudio=null;sIdx=sents.length;endOfScene(my)},{once:true});
+  a.addEventListener('error',()=>{noRecording.add(key);if(my!==token)return;curAudio=null;speakNext(my,true)},{once:true});
+}
+function speakNext(my,noRec){
+  if(my!==token||!playing)return;
+  const sents=list[idx][version];
+  if(sIdx>=sents.length){endOfScene(my);return}
+  if(!noRec&&S.voiceOn&&recSrc(recKey())){playRecording(my,recSrc(recKey()));return}
+  const text=sents[sIdx];setCaption(text);triggerSentence(sIdx);
+  let fired=false;const done=()=>{if(fired||my!==token)return;fired=true;sIdx++;later(()=>speakNext(my,noRec),450)};
+  if(S.voiceOn&&synth&&fails<3){
+    let began=false,u=null;
+    const say=(useVoice)=>{
+      u=new SpeechSynthesisUtterance(speakable(text));u.rate=ttsRate();
+      if(useVoice&&voice){u.voice=voice;u.lang=voice.lang}else u.lang='en-US';
+      const me=u;u.onstart=()=>{began=true;fails=0;notice('')};
+      u.onend=()=>{if(currentU===me)done()};u.onerror=()=>{if(currentU===me&&began)done()};currentU=u;
+      try{if(synth.paused)synth.resume();synth.speak(u)}catch(err){}
+    };
+    say(true);
+    // Chrome sometimes leaves the speech queue stuck: clear it and try once more with the default voice
+    later(()=>{if(began||currentU!==u)return;synth.cancel();later(()=>{if(my!==token)return;say(false);
+      later(()=>{if(began||my!==token)return;fails++;synth.cancel();currentU=null;
+        if(fails>=2)notice("The computer voice didn't start, so the captions are telling the story. Open Settings and press Test the voice, then press Play.");
+        later(done,Math.max(800,est(text)-9000))},5000)},300)},4500);
+    later(done,est(text)*2.2+4000);
+  } else {
+    if(S.voiceOn&&!synth)notice('This browser has no reading voice. Try Chrome or Safari. Captions will keep going.');
+    later(done,est(text));
+  }
+}
+
+// ---------- flow ----------
+function go(i,opts={}){
+  if(i<0||i>=list.length)return;
+  idx=i;stopNarration();
+  sceneT0=performance.now();pauseAcc=0;pausedAt=playing?null:performance.now();
+  flyTo(list[idx].view,opts.instant);
+  renderScene();setCards();
+  if(playing)narrate(true);
+  else{completeAll();setCaption(list[idx][version][0]);if(list[idx].fx)gFx.querySelectorAll('.candle').forEach(c=>c.classList.add('on'))}
+}
+function play(){
+  if(!started){start(version);return}
+  playing=true;setPlayIcon();$('end')?.remove();
+  if(pausedAt!=null){pauseAcc+=performance.now()-pausedAt;pausedAt=null}
+  narrate(sIdx===0||sIdx>=list[idx][version].length,true);
+}
+function pause(){playing=false;setPlayIcon();stopNarration();if(pausedAt==null)pausedAt=performance.now()}
+function start(v){
+  setVersion(v,false);started=true;$('start').hidden=true;playing=true;setPlayIcon();
+  go(0);narrate(true,true);
+}
+function finish(){
+  playing=false;setPlayIcon();
+  const ov=document.createElement('div');ov.className='overlay';ov.id='end';ov.style.background='rgba(9,22,32,.25)';
+  const other=version==='k'?'o':'k';
+  ov.innerHTML=`<div class="startcard" style="width:min(520px,100%)"><p class="he" lang="he" dir="rtl" style="text-align:right">עַם יִשְׂרָאֵל חַי</p><h2>The journey continues</h2><p class="lead">Where did your family's journey begin?</p><div class="choices"><button class="choice" type="button" id="again"><b>Watch again</b><span>${version==='k'?'Little Learners':'Explorers'}</span></button><button class="choice" type="button" id="switchV"><b>${other==='k'?'Little Learners':'Explorers'}</b><span>${other==='k'?'Kindergarten to Grade 2':'Grade 3 and up'}</span></button></div></div>`;
+  $('stage').appendChild(ov);
+  $('again').onclick=()=>{ov.remove();playing=true;setPlayIcon();go(0)};
+  $('switchV').onclick=()=>{ov.remove();start(other)};
+}
+function setVersion(v,restart=true){
+  version=v;$('segK').setAttribute('aria-pressed',v==='k');$('segO').setAttribute('aria-pressed',v==='o');
+  const curId=list[idx]?.id;buildList();buildTimeline();buildSceneList();buildScript();syncRate();
+  if(restart&&started){const j=list.findIndex(s=>s.id===curId);go(Math.max(0,j))}
+}
+
+// ---------- panels ----------
+function buildScript(){
+  $('scriptH').textContent=`Script: ${version==='k'?'Little Learners (K–2)':'Explorers (Grades 3+)'}`;
+  $('scriptBody').innerHTML=list.map((s,i)=>`<div class="script-scene"><span class="era">${tx(s.era)}</span><h3>${i+1}. ${tx(s.title)}</h3><p>${s[version].join(' ')}</p></div>`).join('');
+}
+function scriptText(){return list.map((s,i)=>`${i+1}. ${tx(s.title)} (${tx(s.era)})\n${s[version].join(' ')}`).join('\n\n')}
+function buildSceneList(){
+  const box=$('sceneList');box.innerHTML='';
+  SCENES.filter(s=>s.v.includes(version)).forEach(s=>{
+    const l=document.createElement('label');l.className='check';
+    const c=document.createElement('input');c.type='checkbox';c.id='inc-'+s.id;c.checked=!S.skip[version].includes(s.id);
+    c.onchange=()=>{const sk=new Set(S.skip[version]);c.checked?sk.delete(s.id):sk.add(s.id);if(SCENES.filter(x=>x.v.includes(version)).every(x=>sk.has(x.id))){c.checked=true;return}
+      S.skip[version]=[...sk];save();const curId=list[idx]?.id;buildList();buildTimeline();buildScript();if(started){const j=list.findIndex(x=>x.id===curId);idx=Math.max(0,j);setCards()}updateDurations()};
+    l.appendChild(c);l.append(' '+tx(s.title));box.appendChild(l);
+  });
+}
+function syncRate(){$('optRate').value=rate();$('rateVal').textContent=Math.round(rate()*100)+'%'}
+function open(id){const w=$(id);w.hidden=false;w.querySelector('button')?.focus()}
+document.querySelectorAll('.sheet-wrap').forEach(w=>{w.addEventListener('click',e=>{if(e.target===w||e.target.hasAttribute('data-close'))w.hidden=true})});
+
+function updateDurations(){
+  ['k','o'].forEach(v=>{const r=(S.rate[v]||1)*(v==='k'?0.9:1);const secs=SCENES.filter(s=>s.v.includes(v)&&!S.skip[v].includes(s.id)).reduce((t,s)=>t+4+s[v].reduce((a,x)=>a+x.split(/\s+/).length/(2.75*r)+0.85,0),0);
+    $(v==='k'?'durK':'durO').textContent=`About ${Math.round(secs/60)} minutes`});
+}
+
+// ---------- wire up ----------
+$('chooseK').onclick=()=>start('k');$('chooseO').onclick=()=>start('o');
+$('startScript').onclick=()=>open('scriptSheet');
+$('startCredits').onclick=()=>open('creditsSheet');
+$('setCredits').onclick=()=>{$('settingsSheet').hidden=true;open('creditsSheet')};
+$('play').onclick=()=>playing?pause():play();
+$('prev').onclick=()=>{if(!started)return;go(idx-1)};$('next').onclick=()=>{if(!started)return;go(idx+1)};
+$('segK').onclick=()=>setVersion('k');$('segO').onclick=()=>setVersion('o');
+$('scriptBtn').onclick=()=>open('scriptSheet');$('setBtn').onclick=()=>open('settingsSheet');
+$('fsBtn').onclick=()=>{try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.().catch(()=>{})}catch(e){}};
+$('copyScript').onclick=async()=>{const b=$('copyScript');try{await navigator.clipboard.writeText(scriptText());b.textContent='Copied'}catch(e){const r=document.createRange();r.selectNodeContents($('scriptBody'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected. Press Ctrl+C or ⌘C'}setTimeout(()=>b.textContent='Copy script',2500)};
+const voiceUI=()=>{$('voiceBtn').setAttribute('aria-pressed',S.voiceOn);$('optVoice').checked=S.voiceOn};
+$('voiceBtn').onclick=()=>{S.voiceOn=!S.voiceOn;fails=0;notice('');save();voiceUI();if(playing)narrate(false)};
+$('optVoice').onchange=e=>{S.voiceOn=e.target.checked;fails=0;notice('');save();voiceUI();if(playing)narrate(false)};
+$('optCC').onchange=e=>{S.cc=e.target.checked;save();$('caption').hidden=!S.cc;flyTo(curView,true)};
+$('optVoiceSel').onchange=e=>{fails=0;notice('');voice=voices.find(v=>v.name===e.target.value)||voice;S.voiceName=voice?voice.name:'';save();
+  if(synth&&!playing){synth.cancel();const u=new SpeechSynthesisUtterance('Shalom! This is how I sound.');u.voice=voice;u.rate=ttsRate();synth.speak(u)}};
+$('testVoice').onclick=()=>{fails=0;notice('');const st=$('testState');if(!synth){st.textContent='This browser has no reading voice. Try Chrome or Safari.';return}
+  synth.cancel();const u=new SpeechSynthesisUtterance('Shalom! This is the voice that will tell the story.');if(voice)u.voice=voice;u.rate=ttsRate();let ok=false;u.onstart=()=>{ok=true;fails=0;st.textContent='Working. You should hear it now.'};
+  st.textContent='Trying…';synth.resume();synth.speak(u);setTimeout(()=>{if(!ok)st.textContent='No sound came through. Check that your volume is up and try another voice from the list.'},3000)};
+$('noticeX').onclick=()=>notice('');
+$('optRate').oninput=e=>{S.rate[version]=+e.target.value;save();syncRate();updateDurations();if(curAudio)curAudio.playbackRate=rate()};
+// when the slider is let go during playback, pick the sentence up again at the new speed so captions stay in step
+$('optRate').onchange=()=>{if(playing)narrate(false)};
+addEventListener('keydown',e=>{
+  if(e.target.closest('input,select,textarea'))return;
+  const openSheet=document.querySelector('.sheet-wrap:not([hidden])');
+  if(e.key==='Escape'&&openSheet){openSheet.hidden=true;return}
+  if(openSheet)return;
+  if(e.key===' '){e.preventDefault();playing?pause():play()}
+  else if(e.key==='ArrowRight'&&started)go(idx+1);
+  else if(e.key==='ArrowLeft'&&started)go(idx-1);
+  else if(e.key==='f'||e.key==='F')$('fsBtn').click();
+});
+
+// ---------- boot ----------
+$('caption').hidden=!S.cc;$('optCC').checked=S.cc;voiceUI();
+buildList();buildTimeline();buildSceneList();buildScript();syncRate();updateDurations();
+// resting state behind the start card: the whole map with every journey drawn
+(function preview(){setEra('modern',true);idx=0;sceneT0=performance.now();pausedAt=performance.now();
+  SCENES.filter(s=>s.v.includes('o')).forEach(s=>routesFor(s).forEach(r=>drawTrail(r,true)));
+  $('era').textContent='Nearly 4,000 years';$('title').textContent="Our People's Journey";$('count').textContent='';
+  $('art').innerHTML=`<svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">${ART.intro()}</svg>`;$('he').textContent='הַמַּסָּע שֶׁלָּנוּ';$('tr').textContent='Our journey';
+  requestAnimationFrame(()=>flyTo(SCENES[0].view,true));})();
+</script>
+</html>
